@@ -34,6 +34,16 @@ const Navbar = () => {
               Matchs
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to="/teams"
+              className={({ isActive }) =>
+                isActive ? "navbar__link active" : "navbar__link"
+              }
+            >
+              Équipes
+            </NavLink>
+          </li>
         </ul>
       </div>
     </nav>

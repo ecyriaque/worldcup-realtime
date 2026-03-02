@@ -1,5 +1,6 @@
 import axios from "axios";
-import type { Match, PhaseType, MatchEvent } from "../types/match";
+import type { Match, PhaseType, MatchEvent, Team } from "../types/match";
+import type { Player } from "../types/player";
 import { mockMatches } from "../data/mockMatches";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -59,6 +60,62 @@ export async function fetchMatchEvents(matchId: number): Promise<MatchEvent[]> {
     );
     return res.data;
   } catch {
+    return [];
+  }
+}
+
+// ── Teams API ────────────────────────────────────────────────────────────────
+
+/**
+ * Récupère toutes les équipes.
+ */
+export async function fetchTeams(): Promise<Team[]> {
+  try {
+    const res = await api.get<Team[]>("/api/teams");
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching teams:", error);
+    return [];
+  }
+}
+
+/**
+ * Récupère une équipe par son id.
+ */
+export async function fetchTeamById(id: number): Promise<Team | undefined> {
+  try {
+    const res = await api.get<Team>(`/api/teams/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching team:", error);
+    return undefined;
+  }
+}
+
+// ── Players API ──────────────────────────────────────────────────────────────
+
+/**
+ * Récupère tous les joueurs d'une équipe.
+ */
+export async function fetchPlayersByTeam(teamId: number): Promise<Player[]> {
+  try {
+    const res = await api.get<Player[]>(`/api/players/team/${teamId}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching players:", error);
+    return [];
+  }
+}
+
+/**
+ * Récupère tous les joueurs.
+ */
+export async function fetchAllPlayers(): Promise<Player[]> {
+  try {
+    const res = await api.get<Player[]>("/api/players");
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching players:", error);
     return [];
   }
 }
