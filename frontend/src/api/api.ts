@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Match, PhaseType } from "../types/match";
+import type { Match, PhaseType, MatchEvent } from "../types/match";
 import { mockMatches } from "../data/mockMatches";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -44,5 +44,21 @@ export async function fetchMatchById(id: number): Promise<Match | undefined> {
     return res.data;
   } catch {
     return mockMatches.find((m) => m.matchId === id);
+  }
+}
+
+// ── Match Events API ─────────────────────────────────────────────────────────
+
+/**
+ * Récupère tous les événements d'un match.
+ */
+export async function fetchMatchEvents(matchId: number): Promise<MatchEvent[]> {
+  try {
+    const res = await api.get<MatchEvent[]>(
+      `/api/match-events/match/${matchId}`,
+    );
+    return res.data;
+  } catch {
+    return [];
   }
 }
