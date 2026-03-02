@@ -5,7 +5,9 @@ import { Phase } from "./modules/phase/entity";
 import { Group } from "./modules/group/entity";
 import { Team } from "./modules/team/entity";
 import { Match } from "./modules/match/entity";
+import { MatchEvent } from "./modules/matchEvent/entity";
 import { GroupStanding } from "./modules/standing/entity";
+import { Player } from "./modules/player/entity";
 
 export const dataSourceOptions: DataSourceOptions = {
   type: "postgres",
@@ -14,7 +16,7 @@ export const dataSourceOptions: DataSourceOptions = {
   username: config.db.user,
   password: config.db.password,
   database: config.db.name,
-  entities: [Competition, Phase, Group, Team, Match, GroupStanding],
+  entities: [Competition, Phase, Group, Team, Match, MatchEvent, GroupStanding, Player],
   synchronize: false,
   logging: process.env.NODE_ENV === "development",
 };

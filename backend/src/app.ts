@@ -7,7 +7,9 @@ import phaseRoutes from "./modules/phase/routes";
 import groupRoutes from "./modules/group/routes";
 import teamRoutes from "./modules/team/routes";
 import matchRoutes from "./modules/match/routes";
+import matchEventRoutes from "./modules/matchEvent/routes";
 import standingRoutes from "./modules/standing/routes";
+import playerRoutes from "./modules/player/routes";
 
 export function createApp(): Application {
   const app = express();
@@ -28,7 +30,9 @@ export function createApp(): Application {
   app.use("/api/phases", phaseRoutes);
   app.use("/api/groups", groupRoutes);
   app.use("/api/teams", teamRoutes);
+  app.use("/api/players", playerRoutes);
   app.use("/api/matches", matchRoutes);
+  app.use("/api/match-events", matchEventRoutes);
   app.use("/api/standings", standingRoutes);
 
   // 404
