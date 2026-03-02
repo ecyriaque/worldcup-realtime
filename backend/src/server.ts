@@ -1,10 +1,9 @@
-const http = require("http");
+import http from "http";
+import { config } from "./config";
+import { createApp } from "./app";
+import { createSocketServer } from "./websocket/socket";
 
-const { config } = require("./config");
-const { createApp } = require("./app");
-const { createSocketServer } = require("./websocket/socket");
-
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = createApp();
 
   const httpServer = http.createServer(app);

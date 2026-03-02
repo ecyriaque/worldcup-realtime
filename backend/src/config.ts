@@ -1,6 +1,9 @@
-require("dotenv").config();
+import { config as dotenvConfig } from "dotenv";
+import { Config } from "./types/config.types";
 
-const config = {
+dotenvConfig();
+
+export const config: Config = {
   // Server
   port: Number(process.env.PORT || 3000),
   corsOrigin: process.env.CORS_ORIGIN?.split(",") || "*",
@@ -14,5 +17,3 @@ const config = {
     name: process.env.DB_NAME || "worldcup",
   },
 };
-
-module.exports = { config };
