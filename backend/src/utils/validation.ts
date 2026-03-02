@@ -3,7 +3,11 @@ import { validate, ValidationError } from "class-validator";
 import { plainToClass } from "class-transformer";
 
 export function validateDto(dtoClass: any) {
-  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     const dtoInstance = plainToClass(dtoClass, req.body);
     const errors: ValidationError[] = await validate(dtoInstance);
 
@@ -26,7 +30,7 @@ export function validateDto(dtoClass: any) {
 }
 
 export function asyncHandler(
-  fn: (req: Request, res: Response, next: NextFunction) => Promise<any>
+  fn: (req: Request, res: Response, next: NextFunction) => Promise<any>,
 ) {
   return (req: Request, res: Response, next: NextFunction) => {
     Promise.resolve(fn(req, res, next)).catch(next);

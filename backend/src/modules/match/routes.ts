@@ -13,7 +13,11 @@ router.get("/phase/:phaseId", asyncHandler(controller.getByPhase));
 router.get("/group/:groupId", asyncHandler(controller.getByGroup));
 router.get("/status/:status", asyncHandler(controller.getByStatus));
 router.post("/", validateDto(CreateMatchDto), asyncHandler(controller.create));
-router.put("/:id", validateDto(UpdateMatchDto), asyncHandler(controller.update));
+router.put(
+  "/:id",
+  validateDto(UpdateMatchDto),
+  asyncHandler(controller.update),
+);
 router.patch("/:id/score", asyncHandler(controller.updateScore));
 router.patch("/:id/status", asyncHandler(controller.updateStatus));
 router.delete("/:id", asyncHandler(controller.delete));

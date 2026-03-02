@@ -43,7 +43,7 @@ export class GroupStandingService {
 
   async updateStanding(
     id: number,
-    dto: UpdateGroupStandingDto
+    dto: UpdateGroupStandingDto,
   ): Promise<GroupStanding> {
     // Recalculate goal difference if goals changed
     if (dto.goalsFor !== undefined || dto.goalsAgainst !== undefined) {

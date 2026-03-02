@@ -45,7 +45,7 @@ export class GroupStandingRepository {
 
   async update(
     id: number,
-    data: Partial<GroupStanding>
+    data: Partial<GroupStanding>,
   ): Promise<GroupStanding | null> {
     await this.repository.update(id, data);
     return this.findById(id);

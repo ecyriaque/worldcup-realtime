@@ -25,7 +25,10 @@ export class CompetitionRepository {
     return this.repository.save(competition);
   }
 
-  async update(id: number, data: Partial<Competition>): Promise<Competition | null> {
+  async update(
+    id: number,
+    data: Partial<Competition>,
+  ): Promise<Competition | null> {
     await this.repository.update(id, data);
     return this.findById(id);
   }
