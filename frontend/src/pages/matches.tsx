@@ -26,11 +26,11 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         matches: state.matches.map((m) =>
-          m.match_id === action.payload.matchId
+          m.matchId === action.payload.matchId
             ? {
                 ...m,
-                home_score: action.payload.homeScore,
-                away_score: action.payload.awayScore,
+                homeScore: action.payload.homeScore,
+                awayScore: action.payload.awayScore,
                 status: action.payload.status,
               }
             : m,
@@ -83,8 +83,8 @@ const Matches = () => {
 
   // Regrouper par phase → groupe
   const grouped = filtered.reduce<Record<string, Match[]>>((acc, match) => {
-    const key = match.group_name
-      ? `${match.phase.name} · ${match.group_name}`
+    const key = match.group
+      ? `${match.phase.name} · ${match.group.name}`
       : match.phase.name;
     if (!acc[key]) acc[key] = [];
     acc[key].push(match);
@@ -133,7 +133,7 @@ const Matches = () => {
                 <h2 className="matches-group__label">{groupLabel}</h2>
                 <div className="matches-group__list">
                   {groupMatches.map((match) => (
-                    <MatchCard key={match.match_id} match={match} />
+                    <MatchCard key={match.matchId} match={match} />
                   ))}
                 </div>
               </section>

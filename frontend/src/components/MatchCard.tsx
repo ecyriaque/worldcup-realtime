@@ -16,7 +16,7 @@ const STATUS_CONFIG = {
 const MatchCard = ({ match }: MatchCardProps) => {
   const navigate = useNavigate();
   const statusCfg = STATUS_CONFIG[match.status];
-  const date = new Date(match.match_datetime);
+  const date = new Date(match.matchDatetime);
 
   const formattedDate = date.toLocaleDateString("fr-FR", {
     weekday: "short",
@@ -31,19 +31,19 @@ const MatchCard = ({ match }: MatchCardProps) => {
   return (
     <article
       className={`match-card ${match.status === "LIVE" ? "match-card--live" : ""}`}
-      onClick={() => navigate(`/matches/${match.match_id}`)}
+      onClick={() => navigate(`/matches/${match.matchId}`)}
       role="button"
       tabIndex={0}
       onKeyDown={(e) =>
-        e.key === "Enter" && navigate(`/matches/${match.match_id}`)
+        e.key === "Enter" && navigate(`/matches/${match.matchId}`)
       }
-      aria-label={`Match ${match.home_team.name} vs ${match.away_team.name}`}
+      aria-label={`Match ${match.homeTeam.name} vs ${match.awayTeam.name}`}
     >
       {/* Header */}
       <div className="match-card__header">
         <span className="match-card__phase">
-          {match.group_name
-            ? `${PHASE_LABELS[match.phase.type]} · ${match.group_name}`
+          {match.group
+            ? `${PHASE_LABELS[match.phase.type]} · ${match.group.name}`
             : PHASE_LABELS[match.phase.type]}
         </span>
         <span className={`badge ${statusCfg.cls}`}>
@@ -57,12 +57,12 @@ const MatchCard = ({ match }: MatchCardProps) => {
         {/* Home team */}
         <div className="match-card__team">
           <img
-            src={match.home_team.flag_url}
-            alt={match.home_team.name}
+            src={match.homeTeam.flagUrl}
+            alt={match.homeTeam.name}
             className="match-card__flag"
           />
-          <span className="match-card__team-name">{match.home_team.name}</span>
-          <span className="match-card__team-code">{match.home_team.code}</span>
+          <span className="match-card__team-name">{match.homeTeam.name}</span>
+          <span className="match-card__team-code">{match.homeTeam.code}</span>
         </div>
 
         {/* Score / VS */}
@@ -71,9 +71,9 @@ const MatchCard = ({ match }: MatchCardProps) => {
             <span className="match-card__vs">VS</span>
           ) : (
             <>
-              <span className="match-card__score-num">{match.home_score}</span>
+              <span className="match-card__score-num">{match.homeScore}</span>
               <span className="match-card__score-sep">-</span>
-              <span className="match-card__score-num">{match.away_score}</span>
+              <span className="match-card__score-num">{match.awayScore}</span>
             </>
           )}
         </div>
@@ -81,12 +81,12 @@ const MatchCard = ({ match }: MatchCardProps) => {
         {/* Away team */}
         <div className="match-card__team match-card__team--right">
           <img
-            src={match.away_team.flag_url}
-            alt={match.away_team.name}
+            src={match.awayTeam.flagUrl}
+            alt={match.awayTeam.name}
             className="match-card__flag"
           />
-          <span className="match-card__team-name">{match.away_team.name}</span>
-          <span className="match-card__team-code">{match.away_team.code}</span>
+          <span className="match-card__team-name">{match.awayTeam.name}</span>
+          <span className="match-card__team-code">{match.awayTeam.code}</span>
         </div>
       </div>
 

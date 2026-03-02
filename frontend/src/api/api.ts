@@ -43,6 +43,6 @@ export async function fetchMatchById(id: number): Promise<Match | undefined> {
     const res = await api.get<Match>(`/api/matches/${id}`);
     return res.data;
   } catch {
-    return mockMatches.find((m) => m.match_id === id);
+    return mockMatches.find((m) => m.matchId === id);
   }
 }

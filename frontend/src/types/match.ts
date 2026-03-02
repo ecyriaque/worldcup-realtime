@@ -10,30 +10,38 @@ export type PhaseType =
 export type MatchStatus = "SCHEDULED" | "LIVE" | "FINISHED";
 
 export interface Team {
-  team_id: number;
+  teamId: number;
   name: string;
   code: string;
-  flag_url: string;
+  flagUrl: string;
+}
+
+export interface Group {
+  groupId: number;
+  name: string;
+  phaseId: number;
 }
 
 export interface Phase {
-  phase_id: number;
+  phaseId: number;
   name: string;
   type: PhaseType;
-  display_order: number;
+  displayOrder: number;
+  competitionId?: number;
 }
 
 export interface Match {
-  match_id: number;
-  match_datetime: string;
+  matchId: number;
+  matchDatetime: string;
   stadium: string;
   status: MatchStatus;
-  home_score: number;
-  away_score: number;
+  homeScore: number;
+  awayScore: number;
   phase: Phase;
-  group_name?: string;
-  home_team: Team;
-  away_team: Team;
+  group?: Group;
+  homeTeam: Team;
+  awayTeam: Team;
+  updatedAt?: string;
 }
 
 export const PHASE_LABELS: Record<PhaseType, string> = {

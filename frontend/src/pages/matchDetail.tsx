@@ -52,8 +52,8 @@ const MatchDetail = () => {
     match && liveUpdate
       ? {
           ...match,
-          home_score: liveUpdate.homeScore,
-          away_score: liveUpdate.awayScore,
+          homeScore: liveUpdate.homeScore,
+          awayScore: liveUpdate.awayScore,
           status: liveUpdate.status,
         }
       : match;
@@ -110,7 +110,7 @@ const MatchDetail = () => {
   }
 
   const statusCfg = STATUS_CONFIG[liveMatch.status];
-  const date = new Date(liveMatch.match_datetime);
+  const date = new Date(liveMatch.matchDatetime);
   const formattedDate = date.toLocaleDateString("fr-FR", {
     weekday: "long",
     day: "numeric",
@@ -135,8 +135,8 @@ const MatchDetail = () => {
 
         {/* ── Phase / group breadcrumb ── */}
         <p className="match-detail__breadcrumb">
-          {liveMatch.group_name
-            ? `${PHASE_LABELS[liveMatch.phase.type]} · ${liveMatch.group_name}`
+          {liveMatch.group
+            ? `${PHASE_LABELS[liveMatch.phase.type]} · ${liveMatch.group.name}`
             : PHASE_LABELS[liveMatch.phase.type]}
         </p>
 
@@ -155,15 +155,15 @@ const MatchDetail = () => {
             {/* Home team */}
             <div className="match-detail__team">
               <img
-                src={liveMatch.home_team.flag_url}
-                alt={`Drapeau ${liveMatch.home_team.name}`}
+                src={liveMatch.homeTeam.flagUrl}
+                alt={`Drapeau ${liveMatch.homeTeam.name}`}
                 className="match-detail__flag"
               />
               <span className="match-detail__team-name">
-                {liveMatch.home_team.name}
+                {liveMatch.homeTeam.name}
               </span>
               <span className="match-detail__team-code">
-                {liveMatch.home_team.code}
+                {liveMatch.homeTeam.code}
               </span>
             </div>
 
@@ -175,22 +175,22 @@ const MatchDetail = () => {
                 <div className="match-detail__score">
                   <span
                     className={
-                      liveMatch.home_score > liveMatch.away_score
+                      liveMatch.homeScore > liveMatch.awayScore
                         ? "score-winner"
                         : ""
                     }
                   >
-                    {liveMatch.home_score}
+                    {liveMatch.homeScore}
                   </span>
                   <span className="match-detail__score-sep">—</span>
                   <span
                     className={
-                      liveMatch.away_score > liveMatch.home_score
+                      liveMatch.awayScore > liveMatch.homeScore
                         ? "score-winner"
                         : ""
                     }
                   >
-                    {liveMatch.away_score}
+                    {liveMatch.awayScore}
                   </span>
                 </div>
               )}
@@ -202,15 +202,15 @@ const MatchDetail = () => {
             {/* Away team */}
             <div className="match-detail__team match-detail__team--right">
               <img
-                src={liveMatch.away_team.flag_url}
-                alt={`Drapeau ${liveMatch.away_team.name}`}
+                src={liveMatch.awayTeam.flagUrl}
+                alt={`Drapeau ${liveMatch.awayTeam.name}`}
                 className="match-detail__flag"
               />
               <span className="match-detail__team-name">
-                {liveMatch.away_team.name}
+                {liveMatch.awayTeam.name}
               </span>
               <span className="match-detail__team-code">
-                {liveMatch.away_team.code}
+                {liveMatch.awayTeam.code}
               </span>
             </div>
           </div>
@@ -252,12 +252,12 @@ const MatchDetail = () => {
                 </p>
               </div>
             </div>
-            {liveMatch.group_name && (
+            {liveMatch.group && (
               <div className="info-item">
                 <span className="info-item__icon">📋</span>
                 <div>
                   <p className="info-item__label">Groupe</p>
-                  <p className="info-item__value">{liveMatch.group_name}</p>
+                  <p className="info-item__value">{liveMatch.group.name}</p>
                 </div>
               </div>
             )}
