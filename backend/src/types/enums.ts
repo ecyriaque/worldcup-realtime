@@ -13,3 +13,12 @@ export enum MatchStatus {
   LIVE = "LIVE",
   FINISHED = "FINISHED",
 }
+
+export enum MatchEventType {
+  GOAL = "GOAL",
+  PENALTY_GOAL = "PENALTY_GOAL",
+  OWN_GOAL = "OWN_GOAL",
+  YELLOW_CARD = "YELLOW_CARD",
+  RED_CARD = "RED_CARD",
+  SUBSTITUTION = "SUBSTITUTION",
+}
