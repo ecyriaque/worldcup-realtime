@@ -1,9 +1,15 @@
+import "reflect-metadata";
 import http from "http";
 import { config } from "./config";
 import { createApp } from "./app";
 import { createSocketServer } from "./websocket/socket";
+import { initializeDatabase } from "./database";
 
 async function bootstrap(): Promise<void> {
+  // Initialize database connection
+  await initializeDatabase();
+  console.log("✅ Database connected");
+
   const app = createApp();
 
   const httpServer = http.createServer(app);
