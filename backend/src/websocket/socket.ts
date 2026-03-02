@@ -1,6 +1,6 @@
 import { Server as SocketIOServer } from "socket.io";
 import { Server as HTTPServer } from "http";
-import { MatchStatus } from "../types/enums";
+import { MatchStatus, MatchEventType } from "../types/enums";
 
 // ── Payload émis vers les clients lors d'une mise à jour ──────────────────────
 export interface MatchUpdatePayload {
@@ -8,6 +8,18 @@ export interface MatchUpdatePayload {
   homeScore: number;
   awayScore: number;
   status: MatchStatus;
+  currentMinute?: number;
+}
+
+export interface MatchEventPayload {
+  eventId: number;
+  matchId: number;
+  teamId: number;
+  playerId?: number;
+  playerName?: string;
+  eventType: MatchEventType;
+  minute: number;
+  extraInfo?: string;
 }
 
 // ── Nom des rooms / events ─────────────────────────────────────────────────────
@@ -15,6 +27,7 @@ export const matchRoom = (matchId: number): string => `match_${matchId}`;
 export const EVENTS = {
   MATCH_UPDATE: "match:update", // mise à jour d'un match précis (room)
   MATCHES_LIVE_UPDATE: "matches:liveUpdate", // broadcast global (liste des matchs)
+  MATCH_EVENT: "match:event", // nouvel événement dans un match (but, carton, etc.)
 } as const;
 
 // ── Création du serveur Socket.IO ─────────────────────────────────────────────
@@ -62,4 +75,16 @@ export function emitMatchUpdate(
   io.to(matchRoom(payload.matchId)).emit(EVENTS.MATCH_UPDATE, payload);
   // Broadcast global pour rafraîchir la liste des matchs
   io.emit(EVENTS.MATCHES_LIVE_UPDATE, payload);
+}
+
+// ── Helper : émettre un événement de match (but, carton, etc.) ────────────────
+export function emitMatchEventUpdate(
+  io: SocketIOServer,
+  event: MatchEventPayload | { matchId: number; [key: string]: unknown },
+): void {
+  const matchId = event.matchId;
+  // Aux clients qui regardent la page détail du match
+  io.to(matchRoom(matchId)).emit(EVENTS.MATCH_EVENT, event);
+  // Broadcast global pour notifier les autres pages
+  io.emit(EVENTS.MATCH_EVENT, event);
 }
