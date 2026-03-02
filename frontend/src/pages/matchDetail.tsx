@@ -29,16 +29,19 @@ function reducer(state: State, action: Action): State {
 
 /* ── Status config ───────────────────────────────────────── */
 const STATUS_CONFIG = {
-  SCHEDULED: { label: "À venir",   cls: "badge-scheduled", icon: "🕐" },
-  LIVE:      { label: "En direct", cls: "badge-live",      icon: "🔴" },
-  FINISHED:  { label: "Terminé",   cls: "badge-finished",  icon: "✅" },
+  SCHEDULED: { label: "À venir", cls: "badge-scheduled", icon: "🕐" },
+  LIVE: { label: "En direct", cls: "badge-live", icon: "🔴" },
+  FINISHED: { label: "Terminé", cls: "badge-finished", icon: "✅" },
 };
 
 /* ── Component ───────────────────────────────────────────── */
 const MatchDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [{ match, loading, error }, dispatch] = useReducer(reducer, initialState);
+  const [{ match, loading, error }, dispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
   useEffect(() => {
     const matchId = Number(id);
@@ -55,7 +58,10 @@ const MatchDetail = () => {
         }
       })
       .catch(() =>
-        dispatch({ type: "FETCH_ERROR", payload: "Impossible de charger le match." })
+        dispatch({
+          type: "FETCH_ERROR",
+          payload: "Impossible de charger le match.",
+        }),
       );
   }, [id]);
 
@@ -77,7 +83,10 @@ const MatchDetail = () => {
       <div className="match-detail-page">
         <div className="container match-detail__state match-detail__state--error">
           <p>⚠️ {error ?? "Match introuvable."}</p>
-          <button className="btn btn-outline" onClick={() => navigate("/matches")}>
+          <button
+            className="btn btn-outline"
+            onClick={() => navigate("/matches")}
+          >
             ← Retour aux matchs
           </button>
         </div>
@@ -88,16 +97,19 @@ const MatchDetail = () => {
   const statusCfg = STATUS_CONFIG[match.status];
   const date = new Date(match.match_datetime);
   const formattedDate = date.toLocaleDateString("fr-FR", {
-    weekday: "long", day: "numeric", month: "long", year: "numeric",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
   const formattedTime = date.toLocaleTimeString("fr-FR", {
-    hour: "2-digit", minute: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 
   return (
     <div className="match-detail-page">
       <div className="container">
-
         {/* ── Back button ── */}
         <button
           className="match-detail__back"
@@ -115,7 +127,6 @@ const MatchDetail = () => {
 
         {/* ── Score card ── */}
         <section className="match-detail__card">
-
           {/* Status badge */}
           <div className="match-detail__status">
             <span className={`badge ${statusCfg.cls}`}>
@@ -126,7 +137,6 @@ const MatchDetail = () => {
 
           {/* Teams + score */}
           <div className="match-detail__scoreboard">
-
             {/* Home team */}
             <div className="match-detail__team">
               <img
@@ -134,8 +144,12 @@ const MatchDetail = () => {
                 alt={`Drapeau ${match.home_team.name}`}
                 className="match-detail__flag"
               />
-              <span className="match-detail__team-name">{match.home_team.name}</span>
-              <span className="match-detail__team-code">{match.home_team.code}</span>
+              <span className="match-detail__team-name">
+                {match.home_team.name}
+              </span>
+              <span className="match-detail__team-code">
+                {match.home_team.code}
+              </span>
             </div>
 
             {/* Score / VS */}
@@ -144,11 +158,19 @@ const MatchDetail = () => {
                 <span className="match-detail__vs">VS</span>
               ) : (
                 <div className="match-detail__score">
-                  <span className={match.home_score > match.away_score ? "score-winner" : ""}>
+                  <span
+                    className={
+                      match.home_score > match.away_score ? "score-winner" : ""
+                    }
+                  >
                     {match.home_score}
                   </span>
                   <span className="match-detail__score-sep">—</span>
-                  <span className={match.away_score > match.home_score ? "score-winner" : ""}>
+                  <span
+                    className={
+                      match.away_score > match.home_score ? "score-winner" : ""
+                    }
+                  >
                     {match.away_score}
                   </span>
                 </div>
@@ -165,8 +187,12 @@ const MatchDetail = () => {
                 alt={`Drapeau ${match.away_team.name}`}
                 className="match-detail__flag"
               />
-              <span className="match-detail__team-name">{match.away_team.name}</span>
-              <span className="match-detail__team-code">{match.away_team.code}</span>
+              <span className="match-detail__team-name">
+                {match.away_team.name}
+              </span>
+              <span className="match-detail__team-code">
+                {match.away_team.code}
+              </span>
             </div>
           </div>
         </section>
@@ -202,7 +228,9 @@ const MatchDetail = () => {
               <span className="info-item__icon">🏆</span>
               <div>
                 <p className="info-item__label">Phase</p>
-                <p className="info-item__value">{PHASE_LABELS[match.phase.type]}</p>
+                <p className="info-item__value">
+                  {PHASE_LABELS[match.phase.type]}
+                </p>
               </div>
             </div>
             {match.group_name && (
@@ -216,7 +244,6 @@ const MatchDetail = () => {
             )}
           </div>
         </section>
-
       </div>
     </div>
   );
