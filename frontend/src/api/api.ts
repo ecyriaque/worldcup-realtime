@@ -1,12 +1,12 @@
-import axios from 'axios'
-import type { Match, PhaseType } from '../types/match'
-import { mockMatches } from '../data/mockMatches'
+import axios from "axios";
+import type { Match, PhaseType } from "../types/match";
+import { mockMatches } from "../data/mockMatches";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export const api = axios.create({
   baseURL: API_URL,
-})
+});
 
 // ── Matches API ──────────────────────────────────────────────────────────────
 
@@ -16,10 +16,10 @@ export const api = axios.create({
  */
 export async function fetchMatches(): Promise<Match[]> {
   try {
-    const res = await api.get<Match[]>('/matches')
-    return res.data
+    const res = await api.get<Match[]>("/matches");
+    return res.data;
   } catch {
-    return mockMatches
+    return mockMatches;
   }
 }
 
@@ -28,10 +28,10 @@ export async function fetchMatches(): Promise<Match[]> {
  */
 export async function fetchMatchesByPhase(phase: PhaseType): Promise<Match[]> {
   try {
-    const res = await api.get<Match[]>(`/matches?phase=${phase}`)
-    return res.data
+    const res = await api.get<Match[]>(`/matches?phase=${phase}`);
+    return res.data;
   } catch {
-    return mockMatches.filter((m) => m.phase.type === phase)
+    return mockMatches.filter((m) => m.phase.type === phase);
   }
 }
 
@@ -40,9 +40,9 @@ export async function fetchMatchesByPhase(phase: PhaseType): Promise<Match[]> {
  */
 export async function fetchMatchById(id: number): Promise<Match | undefined> {
   try {
-    const res = await api.get<Match>(`/matches/${id}`)
-    return res.data
+    const res = await api.get<Match>(`/matches/${id}`);
+    return res.data;
   } catch {
-    return mockMatches.find((m) => m.match_id === id)
+    return mockMatches.find((m) => m.match_id === id);
   }
 }

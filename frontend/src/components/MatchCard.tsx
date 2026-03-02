@@ -1,37 +1,42 @@
-import { useNavigate } from 'react-router-dom'
-import type { Match } from '../types/match'
-import { PHASE_LABELS } from '../types/match'
-import './MatchCard.css'
+import { useNavigate } from "react-router-dom";
+import type { Match } from "../types/match";
+import { PHASE_LABELS } from "../types/match";
+import "./MatchCard.css";
 
 interface MatchCardProps {
-  match: Match
+  match: Match;
 }
 
 const STATUS_CONFIG = {
-  SCHEDULED: { label: 'À venir',  cls: 'badge-scheduled' },
-  LIVE:      { label: 'En direct', cls: 'badge-live'      },
-  FINISHED:  { label: 'Terminé',  cls: 'badge-finished'  },
-}
+  SCHEDULED: { label: "À venir", cls: "badge-scheduled" },
+  LIVE: { label: "En direct", cls: "badge-live" },
+  FINISHED: { label: "Terminé", cls: "badge-finished" },
+};
 
 const MatchCard = ({ match }: MatchCardProps) => {
-  const navigate = useNavigate()
-  const statusCfg = STATUS_CONFIG[match.status]
-  const date = new Date(match.match_datetime)
+  const navigate = useNavigate();
+  const statusCfg = STATUS_CONFIG[match.status];
+  const date = new Date(match.match_datetime);
 
-  const formattedDate = date.toLocaleDateString('fr-FR', {
-    weekday: 'short', day: 'numeric', month: 'short',
-  })
-  const formattedTime = date.toLocaleTimeString('fr-FR', {
-    hour: '2-digit', minute: '2-digit',
-  })
+  const formattedDate = date.toLocaleDateString("fr-FR", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+  const formattedTime = date.toLocaleTimeString("fr-FR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
     <article
-      className={`match-card ${match.status === 'LIVE' ? 'match-card--live' : ''}`}
+      className={`match-card ${match.status === "LIVE" ? "match-card--live" : ""}`}
       onClick={() => navigate(`/matches/${match.match_id}`)}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && navigate(`/matches/${match.match_id}`)}
+      onKeyDown={(e) =>
+        e.key === "Enter" && navigate(`/matches/${match.match_id}`)
+      }
       aria-label={`Match ${match.home_team.name} vs ${match.away_team.name}`}
     >
       {/* Header */}
@@ -42,7 +47,7 @@ const MatchCard = ({ match }: MatchCardProps) => {
             : PHASE_LABELS[match.phase.type]}
         </span>
         <span className={`badge ${statusCfg.cls}`}>
-          {match.status === 'LIVE' && <span className="pulse-dot" />}
+          {match.status === "LIVE" && <span className="pulse-dot" />}
           {statusCfg.label}
         </span>
       </div>
@@ -62,7 +67,7 @@ const MatchCard = ({ match }: MatchCardProps) => {
 
         {/* Score / VS */}
         <div className="match-card__score">
-          {match.status === 'SCHEDULED' ? (
+          {match.status === "SCHEDULED" ? (
             <span className="match-card__vs">VS</span>
           ) : (
             <>
@@ -87,11 +92,13 @@ const MatchCard = ({ match }: MatchCardProps) => {
 
       {/* Footer */}
       <div className="match-card__footer">
-        <span>📅 {formattedDate} · {formattedTime}</span>
+        <span>
+          📅 {formattedDate} · {formattedTime}
+        </span>
         {match.stadium && <span>🏟️ {match.stadium}</span>}
       </div>
     </article>
-  )
-}
+  );
+};
 
-export default MatchCard
+export default MatchCard;

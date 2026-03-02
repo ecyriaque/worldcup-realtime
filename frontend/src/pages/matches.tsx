@@ -1,59 +1,67 @@
-import { useState, useEffect, useReducer } from 'react'
-import { fetchMatches } from '../api/api'
-import type { Match, PhaseType } from '../types/match'
-import { PHASE_ORDER } from '../types/match'
-import MatchCard from '../components/MatchCard'
-import PhaseFilter from '../components/PhaseFilter'
-import './matches.css'
+import { useState, useEffect, useReducer } from "react";
+import { fetchMatches } from "../api/api";
+import type { Match, PhaseType } from "../types/match";
+import { PHASE_ORDER } from "../types/match";
+import MatchCard from "../components/MatchCard";
+import PhaseFilter from "../components/PhaseFilter";
+import "./matches.css";
 
-type State = { matches: Match[]; loading: boolean; error: string | null }
+type State = { matches: Match[]; loading: boolean; error: string | null };
 type Action =
-  | { type: 'FETCH_SUCCESS'; payload: Match[] }
-  | { type: 'FETCH_ERROR'; payload: string }
+  | { type: "FETCH_SUCCESS"; payload: Match[] }
+  | { type: "FETCH_ERROR"; payload: string };
 
-const initialState: State = { matches: [], loading: true, error: null }
+const initialState: State = { matches: [], loading: true, error: null };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'FETCH_SUCCESS':
-      return { matches: action.payload, loading: false, error: null }
-    case 'FETCH_ERROR':
-      return { ...state, loading: false, error: action.payload }
+    case "FETCH_SUCCESS":
+      return { matches: action.payload, loading: false, error: null };
+    case "FETCH_ERROR":
+      return { ...state, loading: false, error: action.payload };
     default:
-      return state
+      return state;
   }
 }
 
 const Matches = () => {
-  const [{ matches, loading, error }, dispatch] = useReducer(reducer, initialState)
-  const [activePhase, setActivePhase] = useState<PhaseType | 'ALL'>('ALL')
+  const [{ matches, loading, error }, dispatch] = useReducer(
+    reducer,
+    initialState,
+  );
+  const [activePhase, setActivePhase] = useState<PhaseType | "ALL">("ALL");
 
   useEffect(() => {
     fetchMatches()
-      .then((data) => dispatch({ type: 'FETCH_SUCCESS', payload: data }))
-      .catch(() => dispatch({ type: 'FETCH_ERROR', payload: 'Impossible de charger les matchs.' }))
-  }, [])
+      .then((data) => dispatch({ type: "FETCH_SUCCESS", payload: data }))
+      .catch(() =>
+        dispatch({
+          type: "FETCH_ERROR",
+          payload: "Impossible de charger les matchs.",
+        }),
+      );
+  }, []);
 
   // Phases disponibles dans les données
   const availablePhases = PHASE_ORDER.filter((p) =>
     matches.some((m) => m.phase.type === p),
-  )
+  );
 
   // Matchs filtrés
   const filtered =
-    activePhase === 'ALL'
+    activePhase === "ALL"
       ? matches
-      : matches.filter((m) => m.phase.type === activePhase)
+      : matches.filter((m) => m.phase.type === activePhase);
 
   // Regrouper par phase → groupe
   const grouped = filtered.reduce<Record<string, Match[]>>((acc, match) => {
     const key = match.group_name
       ? `${match.phase.name} · ${match.group_name}`
-      : match.phase.name
-    if (!acc[key]) acc[key] = []
-    acc[key].push(match)
-    return acc
-  }, {})
+      : match.phase.name;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(match);
+    return acc;
+  }, {});
 
   return (
     <div className="matches-page">
@@ -112,7 +120,7 @@ const Matches = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Matches
+export default Matches;
