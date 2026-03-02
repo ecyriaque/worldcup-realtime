@@ -1,5 +1,7 @@
 import { io } from "socket.io-client";
 
-export const socket = io("http://localhost:3000", {
+const WS_URL = import.meta.env.VITE_WS_URL || "http://localhost:3000";
+
+export const socket = io(WS_URL, {
   autoConnect: true,
 });

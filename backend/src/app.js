@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 
+const { config } = require("./config");
 const healthRoutes = require("./routes/health.routes");
 
 function createApp() {
@@ -8,7 +9,7 @@ function createApp() {
 
   app.use(
     cors({
-      origin: process.env.CORS_ORIGIN?.split(",") || "*",
+      origin: config.corsOrigin,
       credentials: true,
     }),
   );

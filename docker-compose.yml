@@ -1,13 +1,13 @@
-version: "3.9"
-
 services:
   db:
     image: postgres:16-alpine
     container_name: worldcup_db
+    env_file:
+      - .env
     environment:
-      POSTGRES_DB: worldcup
-      POSTGRES_USER: worldcup
-      POSTGRES_PASSWORD: worldcup
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -16,19 +16,27 @@ services:
   backend:
     build: ./backend
     container_name: worldcup_backend
+    env_file:
+      - .env
     ports:
-      - "3000:3000"
+      - "${PORT}:${PORT}"
     environment:
-      PORT: 3000
-      DB_HOST: db
-      DB_USER: worldcup
-      DB_PASSWORD: worldcup
-      DB_NAME: worldcup
+      PORT: ${PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      CORS_ORIGIN: ${CORS_ORIGIN}
     depends_on:
       - db
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_WS_URL: ${VITE_WS_URL}
     container_name: worldcup_frontend
     ports:
       - "5173:80"

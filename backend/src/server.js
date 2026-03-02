@@ -1,10 +1,8 @@
-require("dotenv").config();
 const http = require("http");
 
+const { config } = require("./config");
 const { createApp } = require("./app");
 const { createSocketServer } = require("./websocket/socket");
-
-const PORT = Number(process.env.PORT || 3000);
 
 async function bootstrap() {
   const app = createApp();
@@ -14,8 +12,8 @@ async function bootstrap() {
 
   app.set("io", io);
 
-  httpServer.listen(PORT, () => {
-    console.log(`🚀 API running on http://localhost:${PORT}`);
+  httpServer.listen(config.port, () => {
+    console.log(`🚀 API running on http://localhost:${config.port}`);
   });
 }
 
