@@ -27,7 +27,12 @@ function reducer(state: State, action: Action): State {
         ...state,
         matches: state.matches.map((m) =>
           m.match_id === action.payload.matchId
-            ? { ...m, home_score: action.payload.homeScore, away_score: action.payload.awayScore, status: action.payload.status }
+            ? {
+                ...m,
+                home_score: action.payload.homeScore,
+                away_score: action.payload.awayScore,
+                status: action.payload.status,
+              }
             : m,
         ),
       };

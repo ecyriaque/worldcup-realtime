@@ -48,9 +48,15 @@ const MatchDetail = () => {
   const liveUpdate = useMatchSocket(Number(id));
 
   // Fusionner les données live avec le match chargé initialement
-  const liveMatch: Match | null = match && liveUpdate
-    ? { ...match, home_score: liveUpdate.homeScore, away_score: liveUpdate.awayScore, status: liveUpdate.status }
-    : match;
+  const liveMatch: Match | null =
+    match && liveUpdate
+      ? {
+          ...match,
+          home_score: liveUpdate.homeScore,
+          away_score: liveUpdate.awayScore,
+          status: liveUpdate.status,
+        }
+      : match;
 
   useEffect(() => {
     const matchId = Number(id);
@@ -169,7 +175,9 @@ const MatchDetail = () => {
                 <div className="match-detail__score">
                   <span
                     className={
-                      liveMatch.home_score > liveMatch.away_score ? "score-winner" : ""
+                      liveMatch.home_score > liveMatch.away_score
+                        ? "score-winner"
+                        : ""
                     }
                   >
                     {liveMatch.home_score}
@@ -177,7 +185,9 @@ const MatchDetail = () => {
                   <span className="match-detail__score-sep">—</span>
                   <span
                     className={
-                      liveMatch.away_score > liveMatch.home_score ? "score-winner" : ""
+                      liveMatch.away_score > liveMatch.home_score
+                        ? "score-winner"
+                        : ""
                     }
                   >
                     {liveMatch.away_score}

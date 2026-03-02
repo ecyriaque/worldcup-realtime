@@ -13,7 +13,7 @@ export interface MatchUpdatePayload {
 // ── Nom des rooms / events ─────────────────────────────────────────────────────
 export const matchRoom = (matchId: number): string => `match_${matchId}`;
 export const EVENTS = {
-  MATCH_UPDATE: "match:update",        // mise à jour d'un match précis (room)
+  MATCH_UPDATE: "match:update", // mise à jour d'un match précis (room)
   MATCHES_LIVE_UPDATE: "matches:liveUpdate", // broadcast global (liste des matchs)
 } as const;
 
