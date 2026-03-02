@@ -1,9 +1,10 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchMatchById } from "../api/api";
-import { useMatchSocket } from "../hooks/useMatchSocket";
-import type { Match } from "../types/match";
+import { fetchMatchById, fetchMatchEvents } from "../api/api";
+import { useMatchSocket, useMatchEvents } from "../hooks/useMatchSocket";
+import type { Match, MatchEvent } from "../types/match";
 import { PHASE_LABELS } from "../types/match";
+import MatchEvents from "../components/MatchEvents";
 import "./matchDetail.css";
 
 /* ── Reducer ─────────────────────────────────────────────── */
@@ -43,9 +44,11 @@ const MatchDetail = () => {
     reducer,
     initialState,
   );
+  const [events, setEvents] = useState<MatchEvent[]>([]);
 
   // Mise à jour en temps réel via WebSocket
   const liveUpdate = useMatchSocket(Number(id));
+  const liveEvents = useMatchEvents(Number(id));
 
   // Fusionner les données live avec le match chargé initialement
   const liveMatch: Match | null =
@@ -55,6 +58,7 @@ const MatchDetail = () => {
           homeScore: liveUpdate.homeScore,
           awayScore: liveUpdate.awayScore,
           status: liveUpdate.status,
+          currentMinute: liveUpdate.currentMinute,
         }
       : match;
 
@@ -79,6 +83,23 @@ const MatchDetail = () => {
         }),
       );
   }, [id]);
+
+  // Charger les événements du match
+  useEffect(() => {
+    const matchId = Number(id);
+    if (isNaN(matchId)) return;
+
+    fetchMatchEvents(matchId)
+      .then((data) => setEvents(data))
+      .catch((err) =>
+        console.error("Erreur lors du chargement des événements:", err),
+      );
+  }, [id]);
+
+  // Fusionner les événements initiaux et live, triés par minute
+  const allEvents = [...events, ...liveEvents].sort(
+    (a, b) => a.minute - b.minute,
+  );
 
   /* ── Loading ── */
   if (loading) {
@@ -195,7 +216,12 @@ const MatchDetail = () => {
                 </div>
               )}
               {liveMatch.status === "LIVE" && (
-                <span className="match-detail__live-label">EN DIRECT</span>
+                <span className="match-detail__live-label">
+                  {liveMatch.currentMinute
+                    ? `${liveMatch.currentMinute}' · `
+                    : ""}
+                  EN DIRECT
+                </span>
               )}
             </div>
 
@@ -263,6 +289,17 @@ const MatchDetail = () => {
             )}
           </div>
         </section>
+
+        {/* ── Match Events ── */}
+        {allEvents.length > 0 && (
+          <section className="match-detail__events">
+            <h2 className="match-detail__info-title">Événements du match</h2>
+            <MatchEvents
+              events={allEvents}
+              homeTeamId={liveMatch.homeTeam.teamId}
+            />
+          </section>
+        )}
       </div>
     </div>
   );
