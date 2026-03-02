@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
+import { Server as SocketIOServer } from "socket.io";
 import { MatchService } from "./service";
 import { MatchStatus } from "../../types/enums";
+import { emitMatchUpdate } from "../../websocket/socket";
 
 export class MatchController {
   private service: MatchService;
@@ -58,6 +60,17 @@ export class MatchController {
     const id = parseInt(req.params.id as string);
     const { homeScore, awayScore } = req.body;
     const match = await this.service.updateMatchScore(id, homeScore, awayScore);
+
+    const io = req.app.get("io") as SocketIOServer | undefined;
+    if (io) {
+      emitMatchUpdate(io, {
+        matchId: match.matchId,
+        homeScore: match.homeScore,
+        awayScore: match.awayScore,
+        status: match.status,
+      });
+    }
+
     res.json(match);
   };
 
@@ -65,6 +78,17 @@ export class MatchController {
     const id = parseInt(req.params.id as string);
     const { status } = req.body;
     const match = await this.service.updateMatchStatus(id, status);
+
+    const io = req.app.get("io") as SocketIOServer | undefined;
+    if (io) {
+      emitMatchUpdate(io, {
+        matchId: match.matchId,
+        homeScore: match.homeScore,
+        awayScore: match.awayScore,
+        status: match.status,
+      });
+    }
+
     res.json(match);
   };
 

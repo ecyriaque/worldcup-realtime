@@ -2,6 +2,8 @@ import { useState, useEffect, useReducer } from "react";
 import { fetchMatches } from "../api/api";
 import type { Match, PhaseType } from "../types/match";
 import { PHASE_ORDER } from "../types/match";
+import { socket } from "../services/socket";
+import type { MatchUpdatePayload } from "../hooks/useMatchSocket";
 import MatchCard from "../components/MatchCard";
 import PhaseFilter from "../components/PhaseFilter";
 import "./matches.css";
@@ -9,7 +11,8 @@ import "./matches.css";
 type State = { matches: Match[]; loading: boolean; error: string | null };
 type Action =
   | { type: "FETCH_SUCCESS"; payload: Match[] }
-  | { type: "FETCH_ERROR"; payload: string };
+  | { type: "FETCH_ERROR"; payload: string }
+  | { type: "LIVE_UPDATE"; payload: MatchUpdatePayload };
 
 const initialState: State = { matches: [], loading: true, error: null };
 
@@ -19,6 +22,15 @@ function reducer(state: State, action: Action): State {
       return { matches: action.payload, loading: false, error: null };
     case "FETCH_ERROR":
       return { ...state, loading: false, error: action.payload };
+    case "LIVE_UPDATE":
+      return {
+        ...state,
+        matches: state.matches.map((m) =>
+          m.match_id === action.payload.matchId
+            ? { ...m, home_score: action.payload.homeScore, away_score: action.payload.awayScore, status: action.payload.status }
+            : m,
+        ),
+      };
     default:
       return state;
   }
@@ -40,6 +52,17 @@ const Matches = () => {
           payload: "Impossible de charger les matchs.",
         }),
       );
+  }, []);
+
+  // Écoute les mises à jour live pour tous les matchs
+  useEffect(() => {
+    const handleLiveUpdate = (payload: MatchUpdatePayload) => {
+      dispatch({ type: "LIVE_UPDATE", payload });
+    };
+    socket.on("matches:liveUpdate", handleLiveUpdate);
+    return () => {
+      socket.off("matches:liveUpdate", handleLiveUpdate);
+    };
   }, []);
 
   // Phases disponibles dans les données

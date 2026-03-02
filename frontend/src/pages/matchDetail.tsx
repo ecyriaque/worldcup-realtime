@@ -1,6 +1,7 @@
 import { useEffect, useReducer } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchMatchById } from "../api/api";
+import { useMatchSocket } from "../hooks/useMatchSocket";
 import type { Match } from "../types/match";
 import { PHASE_LABELS } from "../types/match";
 import "./matchDetail.css";
@@ -43,6 +44,14 @@ const MatchDetail = () => {
     initialState,
   );
 
+  // Mise à jour en temps réel via WebSocket
+  const liveUpdate = useMatchSocket(Number(id));
+
+  // Fusionner les données live avec le match chargé initialement
+  const liveMatch: Match | null = match && liveUpdate
+    ? { ...match, home_score: liveUpdate.homeScore, away_score: liveUpdate.awayScore, status: liveUpdate.status }
+    : match;
+
   useEffect(() => {
     const matchId = Number(id);
     if (isNaN(matchId)) {
@@ -78,7 +87,7 @@ const MatchDetail = () => {
   }
 
   /* ── Error ── */
-  if (error || !match) {
+  if (error || !liveMatch) {
     return (
       <div className="match-detail-page">
         <div className="container match-detail__state match-detail__state--error">
@@ -94,8 +103,8 @@ const MatchDetail = () => {
     );
   }
 
-  const statusCfg = STATUS_CONFIG[match.status];
-  const date = new Date(match.match_datetime);
+  const statusCfg = STATUS_CONFIG[liveMatch.status];
+  const date = new Date(liveMatch.match_datetime);
   const formattedDate = date.toLocaleDateString("fr-FR", {
     weekday: "long",
     day: "numeric",
@@ -120,9 +129,9 @@ const MatchDetail = () => {
 
         {/* ── Phase / group breadcrumb ── */}
         <p className="match-detail__breadcrumb">
-          {match.group_name
-            ? `${PHASE_LABELS[match.phase.type]} · ${match.group_name}`
-            : PHASE_LABELS[match.phase.type]}
+          {liveMatch.group_name
+            ? `${PHASE_LABELS[liveMatch.phase.type]} · ${liveMatch.group_name}`
+            : PHASE_LABELS[liveMatch.phase.type]}
         </p>
 
         {/* ── Score card ── */}
@@ -130,7 +139,7 @@ const MatchDetail = () => {
           {/* Status badge */}
           <div className="match-detail__status">
             <span className={`badge ${statusCfg.cls}`}>
-              {match.status === "LIVE" && <span className="pulse-dot" />}
+              {liveMatch.status === "LIVE" && <span className="pulse-dot" />}
               {statusCfg.icon} {statusCfg.label}
             </span>
           </div>
@@ -140,42 +149,42 @@ const MatchDetail = () => {
             {/* Home team */}
             <div className="match-detail__team">
               <img
-                src={match.home_team.flag_url}
-                alt={`Drapeau ${match.home_team.name}`}
+                src={liveMatch.home_team.flag_url}
+                alt={`Drapeau ${liveMatch.home_team.name}`}
                 className="match-detail__flag"
               />
               <span className="match-detail__team-name">
-                {match.home_team.name}
+                {liveMatch.home_team.name}
               </span>
               <span className="match-detail__team-code">
-                {match.home_team.code}
+                {liveMatch.home_team.code}
               </span>
             </div>
 
             {/* Score / VS */}
             <div className="match-detail__score-block">
-              {match.status === "SCHEDULED" ? (
+              {liveMatch.status === "SCHEDULED" ? (
                 <span className="match-detail__vs">VS</span>
               ) : (
                 <div className="match-detail__score">
                   <span
                     className={
-                      match.home_score > match.away_score ? "score-winner" : ""
+                      liveMatch.home_score > liveMatch.away_score ? "score-winner" : ""
                     }
                   >
-                    {match.home_score}
+                    {liveMatch.home_score}
                   </span>
                   <span className="match-detail__score-sep">—</span>
                   <span
                     className={
-                      match.away_score > match.home_score ? "score-winner" : ""
+                      liveMatch.away_score > liveMatch.home_score ? "score-winner" : ""
                     }
                   >
-                    {match.away_score}
+                    {liveMatch.away_score}
                   </span>
                 </div>
               )}
-              {match.status === "LIVE" && (
+              {liveMatch.status === "LIVE" && (
                 <span className="match-detail__live-label">EN DIRECT</span>
               )}
             </div>
@@ -183,15 +192,15 @@ const MatchDetail = () => {
             {/* Away team */}
             <div className="match-detail__team match-detail__team--right">
               <img
-                src={match.away_team.flag_url}
-                alt={`Drapeau ${match.away_team.name}`}
+                src={liveMatch.away_team.flag_url}
+                alt={`Drapeau ${liveMatch.away_team.name}`}
                 className="match-detail__flag"
               />
               <span className="match-detail__team-name">
-                {match.away_team.name}
+                {liveMatch.away_team.name}
               </span>
               <span className="match-detail__team-code">
-                {match.away_team.code}
+                {liveMatch.away_team.code}
               </span>
             </div>
           </div>
@@ -215,12 +224,12 @@ const MatchDetail = () => {
                 <p className="info-item__value">{formattedTime}</p>
               </div>
             </div>
-            {match.stadium && (
+            {liveMatch.stadium && (
               <div className="info-item">
                 <span className="info-item__icon">🏟️</span>
                 <div>
                   <p className="info-item__label">Stade</p>
-                  <p className="info-item__value">{match.stadium}</p>
+                  <p className="info-item__value">{liveMatch.stadium}</p>
                 </div>
               </div>
             )}
@@ -229,16 +238,16 @@ const MatchDetail = () => {
               <div>
                 <p className="info-item__label">Phase</p>
                 <p className="info-item__value">
-                  {PHASE_LABELS[match.phase.type]}
+                  {PHASE_LABELS[liveMatch.phase.type]}
                 </p>
               </div>
             </div>
-            {match.group_name && (
+            {liveMatch.group_name && (
               <div className="info-item">
                 <span className="info-item__icon">📋</span>
                 <div>
                   <p className="info-item__label">Groupe</p>
-                  <p className="info-item__value">{match.group_name}</p>
+                  <p className="info-item__value">{liveMatch.group_name}</p>
                 </div>
               </div>
             )}

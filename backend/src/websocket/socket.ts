@@ -1,6 +1,23 @@
 import { Server as SocketIOServer } from "socket.io";
 import { Server as HTTPServer } from "http";
+import { MatchStatus } from "../types/enums";
 
+// ── Payload émis vers les clients lors d'une mise à jour ──────────────────────
+export interface MatchUpdatePayload {
+  matchId: number;
+  homeScore: number;
+  awayScore: number;
+  status: MatchStatus;
+}
+
+// ── Nom des rooms / events ─────────────────────────────────────────────────────
+export const matchRoom = (matchId: number): string => `match_${matchId}`;
+export const EVENTS = {
+  MATCH_UPDATE: "match:update",        // mise à jour d'un match précis (room)
+  MATCHES_LIVE_UPDATE: "matches:liveUpdate", // broadcast global (liste des matchs)
+} as const;
+
+// ── Création du serveur Socket.IO ─────────────────────────────────────────────
 export function createSocketServer(httpServer: HTTPServer): SocketIOServer {
   const io = new SocketIOServer(httpServer, {
     cors: {
@@ -12,13 +29,37 @@ export function createSocketServer(httpServer: HTTPServer): SocketIOServer {
   io.on("connection", (socket) => {
     console.log("🟢 Socket connected:", socket.id);
 
+    // Rejoindre la room d'un match spécifique (page détail)
+    socket.on("match:join", (matchId: number) => {
+      const room = matchRoom(matchId);
+      void socket.join(room);
+      console.log(`📥 ${socket.id} joined ${room}`);
+    });
+
+    // Quitter la room d'un match
+    socket.on("match:leave", (matchId: number) => {
+      const room = matchRoom(matchId);
+      void socket.leave(room);
+      console.log(`📤 ${socket.id} left ${room}`);
+    });
+
     socket.on("disconnect", () => {
       console.log("🔴 Socket disconnected:", socket.id);
     });
 
-    // Exemple: ping/pong
     socket.on("ping", () => socket.emit("pong"));
   });
 
   return io;
+}
+
+// ── Helper : émettre une mise à jour de match ─────────────────────────────────
+export function emitMatchUpdate(
+  io: SocketIOServer,
+  payload: MatchUpdatePayload,
+): void {
+  // Aux clients qui regardent la page détail du match
+  io.to(matchRoom(payload.matchId)).emit(EVENTS.MATCH_UPDATE, payload);
+  // Broadcast global pour rafraîchir la liste des matchs
+  io.emit(EVENTS.MATCHES_LIVE_UPDATE, payload);
 }

@@ -16,7 +16,7 @@ export const api = axios.create({
  */
 export async function fetchMatches(): Promise<Match[]> {
   try {
-    const res = await api.get<Match[]>("/matches");
+    const res = await api.get<Match[]>("/api/matches");
     return res.data;
   } catch {
     return mockMatches;
@@ -28,7 +28,7 @@ export async function fetchMatches(): Promise<Match[]> {
  */
 export async function fetchMatchesByPhase(phase: PhaseType): Promise<Match[]> {
   try {
-    const res = await api.get<Match[]>(`/matches?phase=${phase}`);
+    const res = await api.get<Match[]>(`/api/matches?phase=${phase}`);
     return res.data;
   } catch {
     return mockMatches.filter((m) => m.phase.type === phase);
@@ -40,7 +40,7 @@ export async function fetchMatchesByPhase(phase: PhaseType): Promise<Match[]> {
  */
 export async function fetchMatchById(id: number): Promise<Match | undefined> {
   try {
-    const res = await api.get<Match>(`/matches/${id}`);
+    const res = await api.get<Match>(`/api/matches/${id}`);
     return res.data;
   } catch {
     return mockMatches.find((m) => m.match_id === id);
