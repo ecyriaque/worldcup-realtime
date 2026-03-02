@@ -1,0 +1,6 @@
+export enum PlayerPosition {
+  GOALKEEPER = "GOALKEEPER",
+  DEFENDER = "DEFENDER",
+  MIDFIELDER = "MIDFIELDER",
+  FORWARD = "FORWARD",
+}
