@@ -62,6 +62,7 @@ export class MatchController {
         homeScore: match.homeScore,
         awayScore: match.awayScore,
         status: match.status,
+        currentMinute: match.currentMinute,
       });
     }
 
@@ -80,6 +81,7 @@ export class MatchController {
         homeScore: match.homeScore,
         awayScore: match.awayScore,
         status: match.status,
+        currentMinute: match.currentMinute,
       });
     }
 
@@ -98,6 +100,7 @@ export class MatchController {
         homeScore: match.homeScore,
         awayScore: match.awayScore,
         status: match.status,
+        currentMinute: match.currentMinute,
       });
     }
 

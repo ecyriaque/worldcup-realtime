@@ -33,6 +33,9 @@ export class Match {
   @Column({ name: "away_score", type: "int", default: 0 })
   awayScore!: number;
 
+  @Column({ name: "current_minute", type: "int", default: 0, nullable: true })
+  currentMinute?: number;
+
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt?: Date;
 

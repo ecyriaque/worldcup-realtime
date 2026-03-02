@@ -5,6 +5,7 @@ import {
   IsInt,
   IsOptional,
   Min,
+  Max,
   MaxLength,
 } from "class-validator";
 import { Type } from "class-transformer";
@@ -73,6 +74,12 @@ export class UpdateMatchDto {
   @Min(0)
   @IsOptional()
   awayScore?: number;
+
+  @IsInt()
+  @Min(0)
+  @Max(120)
+  @IsOptional()
+  currentMinute?: number;
 
   @IsInt()
   @Min(1)
