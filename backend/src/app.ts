@@ -10,7 +10,7 @@ export function createApp(): Application {
     cors({
       origin: config.corsOrigin,
       credentials: true,
-    })
+    }),
   );
   app.use(express.json());
 
