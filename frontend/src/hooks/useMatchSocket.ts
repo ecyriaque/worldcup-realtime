@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 import { socket } from "../services/socket";
-import type { MatchStatus } from "../types/match";
+import type { MatchStatus, MatchEvent } from "../types/match";
 
 // ── Payload reçu du serveur ───────────────────────────────────────────────────
 export interface MatchUpdatePayload {
@@ -8,6 +8,7 @@ export interface MatchUpdatePayload {
   homeScore: number;
   awayScore: number;
   status: MatchStatus;
+  currentMinute?: number;
 }
 
 // ── State / Reducer ───────────────────────────────────────────────────────────
@@ -44,4 +45,35 @@ export function useMatchSocket(matchId: number): MatchUpdatePayload | null {
   }, [matchId]);
 
   return update;
+}
+
+// ── Match Events Hook ──────────────────────────────────────────────────────────
+type EventState = MatchEvent[];
+type EventAction = { type: "ADD_EVENT"; payload: MatchEvent };
+
+function eventReducer(state: EventState, action: EventAction): EventState {
+  return [...state, action.payload].sort((a, b) => a.minute - b.minute);
+}
+
+/**
+ * Hook qui écoute les nouveaux événements d'un match en temps réel.
+ */
+export function useMatchEvents(matchId: number): MatchEvent[] {
+  const [events, dispatch] = useReducer(eventReducer, []);
+
+  useEffect(() => {
+    const handleEvent = (event: MatchEvent) => {
+      if (event.matchId === matchId) {
+        dispatch({ type: "ADD_EVENT", payload: event });
+      }
+    };
+
+    socket.on("match:event", handleEvent);
+
+    return () => {
+      socket.off("match:event", handleEvent);
+    };
+  }, [matchId]);
+
+  return events;
 }
