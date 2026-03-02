@@ -63,7 +63,7 @@ export class MatchService {
   async updateMatchScore(
     id: number,
     homeScore: number,
-    awayScore: number
+    awayScore: number,
   ): Promise<Match> {
     return this.updateMatch(id, { homeScore, awayScore });
   }

@@ -15,7 +15,7 @@ export const dataSourceOptions: DataSourceOptions = {
   password: config.db.password,
   database: config.db.name,
   entities: [Competition, Phase, Group, Team, Match, GroupStanding],
-  synchronize: false, // Ne jamais utiliser en production
+  synchronize: false,
   logging: process.env.NODE_ENV === "development",
 };
 

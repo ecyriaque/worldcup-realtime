@@ -27,7 +27,7 @@ export class CompetitionService {
 
   async updateCompetition(
     id: number,
-    dto: UpdateCompetitionDto
+    dto: UpdateCompetitionDto,
   ): Promise<Competition> {
     const competition = await this.repository.update(id, dto);
     if (!competition) {
