@@ -9,6 +9,14 @@ export type PhaseType =
 
 export type MatchStatus = "SCHEDULED" | "LIVE" | "FINISHED";
 
+export type MatchEventType =
+  | "GOAL"
+  | "PENALTY_GOAL"
+  | "OWN_GOAL"
+  | "YELLOW_CARD"
+  | "RED_CARD"
+  | "SUBSTITUTION";
+
 export interface Team {
   teamId: number;
   name: string;
@@ -37,11 +45,23 @@ export interface Match {
   status: MatchStatus;
   homeScore: number;
   awayScore: number;
+  currentMinute?: number;
   phase: Phase;
   group?: Group;
   homeTeam: Team;
   awayTeam: Team;
   updatedAt?: string;
+}
+
+export interface MatchEvent {
+  eventId: number;
+  matchId: number;
+  teamId: number;
+  playerName: string;
+  eventType: MatchEventType;
+  minute: number;
+  extraInfo?: string;
+  createdAt?: string;
 }
 
 export const PHASE_LABELS: Record<PhaseType, string> = {
