@@ -48,7 +48,9 @@ const MatchCard = ({ match }: MatchCardProps) => {
         </span>
         <span className={`badge ${statusCfg.cls}`}>
           {match.status === "LIVE" && <span className="pulse-dot" />}
-          {statusCfg.label}
+          {match.status === "LIVE" && match.currentMinute
+            ? `${match.currentMinute}' · ${statusCfg.label}`
+            : statusCfg.label}
         </span>
       </div>
 
