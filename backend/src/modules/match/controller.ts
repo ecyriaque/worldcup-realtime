@@ -53,6 +53,18 @@ export class MatchController {
   update = async (req: Request, res: Response): Promise<void> => {
     const id = parseInt(req.params.id as string);
     const match = await this.service.updateMatch(id, req.body);
+
+    // Émettre l'événement WebSocket pour les mises à jour en temps réel
+    const io = req.app.get("io") as SocketIOServer | undefined;
+    if (io) {
+      emitMatchUpdate(io, {
+        matchId: match.matchId,
+        homeScore: match.homeScore,
+        awayScore: match.awayScore,
+        status: match.status,
+      });
+    }
+
     res.json(match);
   };
 
