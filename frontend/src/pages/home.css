@@ -1,9 +1,21 @@
 /* ── Hero ── */
 .hero {
   position: relative;
-  padding: 6rem 0 5rem;
+  padding: 3rem 0 2.5rem;
   overflow: hidden;
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 4rem 0 3.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding: 6rem 0 5rem;
+  }
 }
 
 .hero__bg-blur {
@@ -81,10 +93,25 @@
 /* ── Info Cards ── */
 .home__cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
   padding-top: 1rem;
-  padding-bottom: 4rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 640px) {
+  .home__cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home__cards {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    padding-bottom: 4rem;
+  }
 }
 
 .info-card {

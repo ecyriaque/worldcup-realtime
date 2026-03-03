@@ -2,9 +2,6 @@
   margin-top: 3rem;
 }
 
-match-detail__events {
-  margin-top: 3rem;
-}
 
 .match-events__title {
   font-size: 1.5rem;
@@ -250,13 +247,17 @@ match-detail__events {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .match-events__timeline {
+    padding-left: 0.75rem;
+  }
+
   .match-events__timeline::before {
-    left: 2rem;
+    left: 1.875rem;
   }
 
   .match-event {
     grid-template-columns: auto 1fr;
-    gap: 1rem;
+    gap: 0.85rem;
   }
 
   .match-event--home,
@@ -265,12 +266,12 @@ match-detail__events {
   }
 
   .match-event__minute {
-    width: 3rem;
-    height: 3rem;
+    width: 2.75rem;
+    height: 2.75rem;
   }
 
   .minute-number {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
   }
 
   .match-event__card {
@@ -290,5 +291,14 @@ match-detail__events {
 
   .match-event__content {
     flex-direction: row !important;
+  }
+
+  .match-event__team-flag {
+    width: 24px;
+    height: 16px;
+  }
+
+  .match-event__card {
+    padding: 0.75rem;
   }
 }

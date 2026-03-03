@@ -1,5 +1,17 @@
 .matches-page {
-  padding: 2.5rem 0 4rem;
+  padding: 1.5rem 0 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .matches-page {
+    padding: 2rem 0 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .matches-page {
+    padding: 2.5rem 0 4rem;
+  }
 }
 
 /* Header */
@@ -76,6 +88,18 @@
 
 .matches-group__list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: 1fr;
   gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .matches-group__list {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .matches-group__list {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
 }
