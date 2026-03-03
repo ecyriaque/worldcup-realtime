@@ -47,4 +47,10 @@ export class GroupStandingController {
     await this.service.deleteStanding(id);
     res.status(204).send();
   };
+
+  updateGroupStandings = async (req: Request, res: Response): Promise<void> => {
+    const groupId = parseInt(req.params.groupId as string);
+    const standings = await this.service.updateGroupStandings(groupId);
+    res.json(standings);
+  };
 }

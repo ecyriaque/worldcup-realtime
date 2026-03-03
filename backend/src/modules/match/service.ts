@@ -2,12 +2,15 @@ import { MatchRepository } from "./repository";
 import { Match } from "./entity";
 import { CreateMatchDto, UpdateMatchDto } from "./dto";
 import { MatchStatus } from "../../types/enums";
+import { GroupStandingService } from "../standing/service";
 
 export class MatchService {
   private repository: MatchRepository;
+  private standingService: GroupStandingService;
 
   constructor() {
     this.repository = new MatchRepository();
+    this.standingService = new GroupStandingService();
   }
 
   async getAllMatches(): Promise<Match[]> {
@@ -53,10 +56,38 @@ export class MatchService {
       throw new Error("Home team and away team must be different");
     }
 
+    // Récupérer le match avant la mise à jour pour comparer
+    const oldMatch = await this.repository.findById(id);
+    if (!oldMatch) {
+      throw new Error(`Match with ID ${id} not found`);
+    }
+
     const match = await this.repository.update(id, dto);
     if (!match) {
       throw new Error(`Match with ID ${id} not found`);
     }
+
+    // Si le match est dans un groupe et que le statut est FINISHED ou que les scores ont changé
+    if (match.groupId) {
+      const shouldUpdateStandings =
+        match.status === MatchStatus.FINISHED &&
+        (oldMatch.status !== MatchStatus.FINISHED ||
+          oldMatch.homeScore !== match.homeScore ||
+          oldMatch.awayScore !== match.awayScore);
+
+      if (shouldUpdateStandings) {
+        // Mettre à jour les standings du groupe de manière asynchrone
+        this.standingService
+          .updateGroupStandings(match.groupId)
+          .catch((err) => {
+            console.error(
+              `Error updating standings for group ${match.groupId}:`,
+              err,
+            );
+          });
+      }
+    }
+
     return match;
   }
 

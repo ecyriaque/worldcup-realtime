@@ -9,6 +9,7 @@ const controller = new GroupStandingController();
 router.get("/", asyncHandler(controller.getAll));
 router.get("/:id", asyncHandler(controller.getOne));
 router.get("/group/:groupId", asyncHandler(controller.getByGroup));
+router.post("/group/:groupId/update", asyncHandler(controller.updateGroupStandings));
 router.get("/team/:teamId", asyncHandler(controller.getByTeam));
 router.post(
   "/",

@@ -55,4 +55,28 @@ export class GroupStandingRepository {
     const result = await this.repository.delete(id);
     return (result.affected ?? 0) > 0;
   }
+
+  async findByGroupAndTeam(
+    groupId: number,
+    teamId: number,
+  ): Promise<GroupStanding | null> {
+    return this.repository.findOne({
+      where: { groupId, teamId },
+      relations: ["team"],
+    });
+  }
+
+  async upsert(data: Partial<GroupStanding>): Promise<GroupStanding> {
+    const existing = await this.findByGroupAndTeam(
+      data.groupId!,
+      data.teamId!,
+    );
+
+    if (existing) {
+      await this.repository.update(existing.standingId, data);
+      return (await this.findById(existing.standingId))!;
+    } else {
+      return this.create(data);
+    }
+  }
 }
