@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchTeamById, fetchPlayersByTeam } from "../api/api";
-import type { Team } from "../types/match";
+import { fetchTeamById, fetchPlayersByTeam, fetchStandingsByTeam } from "../api/api";
+import type { Team, GroupStanding } from "../types/match";
 import type { Player, PlayerPosition } from "../types/player";
 import { POSITION_LABELS, POSITION_ICONS } from "../types/player";
 import "./teamDetail.css";
@@ -11,6 +11,7 @@ const TeamDetail = () => {
   const navigate = useNavigate();
   const [team, setTeam] = useState<Team | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
+  const [standings, setStandings] = useState<GroupStanding[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,9 +28,10 @@ const TeamDetail = () => {
           return;
         }
 
-        const [teamData, playersData] = await Promise.all([
+        const [teamData, playersData, standingsData] = await Promise.all([
           fetchTeamById(teamId),
           fetchPlayersByTeam(teamId),
+          fetchStandingsByTeam(teamId),
         ]);
 
         if (!teamData) {
@@ -39,6 +41,7 @@ const TeamDetail = () => {
 
         setTeam(teamData);
         setPlayers(playersData);
+        setStandings(standingsData);
       } catch (err) {
         setError("Impossible de charger les données de l'équipe");
       } finally {
@@ -118,6 +121,91 @@ const TeamDetail = () => {
             </p>
           </div>
         </section>
+
+        {/* Team Statistics */}
+        {standings.length > 0 && (
+          <section className="team-detail__statistics">
+            <h2 className="statistics__title">
+              <span className="statistics__icon">📊</span>
+              Statistiques
+            </h2>
+            <div className="statistics-grid">
+              {standings.map((standing) => (
+                <div key={standing.standingId} className="stat-group">
+                  <div className="stat-group__header">
+                    {standing.group && (
+                      <span className="stat-group__label">
+                        Groupe {standing.group.name}
+                      </span>
+                    )}
+                  </div>
+                  <div className="stat-cards">
+                    <div className="stat-card">
+                      <div className="stat-card__icon">⚽</div>
+                      <div className="stat-card__content">
+                        <div className="stat-card__label">Matchs joués</div>
+                        <div className="stat-card__value">{standing.played}</div>
+                      </div>
+                    </div>
+                    <div className="stat-card stat-card--success">
+                      <div className="stat-card__icon">✓</div>
+                      <div className="stat-card__content">
+                        <div className="stat-card__label">Victoires</div>
+                        <div className="stat-card__value">{standing.wins}</div>
+                      </div>
+                    </div>
+                    <div className="stat-card">
+                      <div className="stat-card__icon">➖</div>
+                      <div className="stat-card__content">
+                        <div className="stat-card__label">Nuls</div>
+                        <div className="stat-card__value">{standing.draw}</div>
+                      </div>
+                    </div>
+                    <div className="stat-card stat-card--danger">
+                      <div className="stat-card__icon">✕</div>
+                      <div className="stat-card__content">
+                        <div className="stat-card__label">Défaites</div>
+                        <div className="stat-card__value">{standing.losses}</div>
+                      </div>
+                    </div>
+                    <div className="stat-card stat-card--primary">
+                      <div className="stat-card__icon">⚡</div>
+                      <div className="stat-card__content">
+                        <div className="stat-card__label">Buts marqués</div>
+                        <div className="stat-card__value">{standing.goalsFor}</div>
+                      </div>
+                    </div>
+                    <div className="stat-card">
+                      <div className="stat-card__icon">🛡️</div>
+                      <div className="stat-card__content">
+                        <div className="stat-card__label">Buts encaissés</div>
+                        <div className="stat-card__value">{standing.goalsAgainst}</div>
+                      </div>
+                    </div>
+                    <div className="stat-card stat-card--highlight">
+                      <div className="stat-card__icon">➕</div>
+                      <div className="stat-card__content">
+                        <div className="stat-card__label">Différence</div>
+                        <div className="stat-card__value">
+                          {standing.goalDifference > 0 ? "+" : ""}{standing.goalDifference}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="stat-card stat-card--points">
+                      <div className="stat-card__icon">🏆</div>
+                      <div className="stat-card__content">
+                        <div className="stat-card__label">Points</div>
+                        <div className="stat-card__value stat-card__value--large">
+                          {standing.points}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Players by position */}
         {positions.map((position) => {

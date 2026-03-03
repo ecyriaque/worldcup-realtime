@@ -173,3 +173,20 @@ export async function fetchStandingsByGroup(
     return [];
   }
 }
+
+/**
+ * Récupère les statistiques d'une équipe.
+ */
+export async function fetchStandingsByTeam(
+  teamId: number,
+): Promise<GroupStanding[]> {
+  try {
+    const res = await api.get<GroupStanding[]>(
+      `/api/standings/team/${teamId}`,
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching team standings:", error);
+    return [];
+  }
+}

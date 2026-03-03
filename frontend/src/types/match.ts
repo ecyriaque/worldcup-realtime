@@ -43,6 +43,7 @@ export interface GroupStanding {
   goalDifference: number;
   points: number;
   team?: Team;
+  group?: Group;
   updatedAt?: string;
 }
 
