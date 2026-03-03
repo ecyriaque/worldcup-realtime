@@ -6,6 +6,7 @@ import MatchDetail from "./pages/matchDetail";
 import Teams from "./pages/teams";
 import TeamDetail from "./pages/teamDetail";
 import Groups from "./pages/groups";
+import Bracket from "./pages/bracket";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="matches" element={<Matches />} />
         <Route path="matches/:id" element={<MatchDetail />} />
         <Route path="groups" element={<Groups />} />
+        <Route path="bracket" element={<Bracket />} />
         <Route path="teams" element={<Teams />} />
         <Route path="teams/:id" element={<TeamDetail />} />
       </Route>
