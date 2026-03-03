@@ -1,5 +1,12 @@
 import axios from "axios";
-import type { Match, PhaseType, MatchEvent, Team, Group, GroupStanding } from "../types/match";
+import type {
+  Match,
+  PhaseType,
+  MatchEvent,
+  Team,
+  Group,
+  GroupStanding,
+} from "../types/match";
 import type { Player } from "../types/player";
 import { mockMatches } from "../data/mockMatches";
 
@@ -153,13 +160,16 @@ export async function fetchGroupById(id: number): Promise<Group | undefined> {
 /**
  * Récupère les classements d'un groupe.
  */
-export async function fetchStandingsByGroup(groupId: number): Promise<GroupStanding[]> {
+export async function fetchStandingsByGroup(
+  groupId: number,
+): Promise<GroupStanding[]> {
   try {
-    const res = await api.get<GroupStanding[]>(`/api/standings/group/${groupId}`);
+    const res = await api.get<GroupStanding[]>(
+      `/api/standings/group/${groupId}`,
+    );
     return res.data;
   } catch (error) {
     console.error("Error fetching standings:", error);
     return [];
   }
 }
-

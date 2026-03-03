@@ -59,20 +59,34 @@ const GroupStandings = ({ groupId, groupName }: GroupStandingsProps) => {
       <div className="group-standings__header">
         <h2 className="group-standings__title">{groupName}</h2>
       </div>
-      
+
       <div className="standings-table-wrapper">
         <table className="standings-table">
           <thead>
             <tr>
               <th className="standings-table__rank">#</th>
               <th className="standings-table__team">Équipe</th>
-              <th className="standings-table__stat" title="Matchs joués">MJ</th>
-              <th className="standings-table__stat" title="Victoires">V</th>
-              <th className="standings-table__stat" title="Nuls">N</th>
-              <th className="standings-table__stat" title="Défaites">D</th>
-              <th className="standings-table__stat" title="Buts pour">BP</th>
-              <th className="standings-table__stat" title="Buts contre">BC</th>
-              <th className="standings-table__stat" title="Différence de buts">+/-</th>
+              <th className="standings-table__stat" title="Matchs joués">
+                MJ
+              </th>
+              <th className="standings-table__stat" title="Victoires">
+                V
+              </th>
+              <th className="standings-table__stat" title="Nuls">
+                N
+              </th>
+              <th className="standings-table__stat" title="Défaites">
+                D
+              </th>
+              <th className="standings-table__stat" title="Buts pour">
+                BP
+              </th>
+              <th className="standings-table__stat" title="Buts contre">
+                BC
+              </th>
+              <th className="standings-table__stat" title="Différence de buts">
+                +/-
+              </th>
               <th className="standings-table__points">Pts</th>
             </tr>
           </thead>
@@ -81,15 +95,21 @@ const GroupStandings = ({ groupId, groupName }: GroupStandingsProps) => {
               <tr
                 key={standing.standingId}
                 className={`standings-table__row ${index < 2 ? "standings-table__row--qualified" : ""}`}
-                onClick={() => standing.team && navigate(`/teams/${standing.team.teamId}`)}
+                onClick={() =>
+                  standing.team && navigate(`/teams/${standing.team.teamId}`)
+                }
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) =>
-                  e.key === "Enter" && standing.team && navigate(`/teams/${standing.team.teamId}`)
+                  e.key === "Enter" &&
+                  standing.team &&
+                  navigate(`/teams/${standing.team.teamId}`)
                 }
               >
                 <td className="standings-table__rank">
-                  <span className={`rank-badge ${index < 2 ? "rank-badge--qualified" : ""}`}>
+                  <span
+                    className={`rank-badge ${index < 2 ? "rank-badge--qualified" : ""}`}
+                  >
                     {index + 1}
                   </span>
                 </td>
@@ -108,19 +128,28 @@ const GroupStandings = ({ groupId, groupName }: GroupStandingsProps) => {
                   </div>
                 </td>
                 <td className="standings-table__stat">{standing.played}</td>
-                <td className="standings-table__stat standings-table__stat--wins">{standing.wins}</td>
+                <td className="standings-table__stat standings-table__stat--wins">
+                  {standing.wins}
+                </td>
                 <td className="standings-table__stat">{standing.draw}</td>
-                <td className="standings-table__stat standings-table__stat--losses">{standing.losses}</td>
+                <td className="standings-table__stat standings-table__stat--losses">
+                  {standing.losses}
+                </td>
                 <td className="standings-table__stat">{standing.goalsFor}</td>
-                <td className="standings-table__stat">{standing.goalsAgainst}</td>
-                <td className={`standings-table__stat ${
-                  standing.goalDifference > 0 
-                    ? "standings-table__stat--positive" 
-                    : standing.goalDifference < 0 
-                    ? "standings-table__stat--negative" 
-                    : ""
-                }`}>
-                  {standing.goalDifference > 0 ? "+" : ""}{standing.goalDifference}
+                <td className="standings-table__stat">
+                  {standing.goalsAgainst}
+                </td>
+                <td
+                  className={`standings-table__stat ${
+                    standing.goalDifference > 0
+                      ? "standings-table__stat--positive"
+                      : standing.goalDifference < 0
+                        ? "standings-table__stat--negative"
+                        : ""
+                  }`}
+                >
+                  {standing.goalDifference > 0 ? "+" : ""}
+                  {standing.goalDifference}
                 </td>
                 <td className="standings-table__points">
                   <strong>{standing.points}</strong>
