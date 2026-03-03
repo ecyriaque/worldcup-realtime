@@ -4,14 +4,17 @@
   flex-direction: column;
   gap: 2rem;
   padding: 1rem 0;
+  position: relative; /* ← indispensable pour le SVG en position absolute */
 }
 
 @media (min-width: 1024px) {
   .tournament-bracket {
     flex-direction: row;
     overflow-x: auto;
-    padding: 2rem 0;
-    gap: 2.5rem;
+    padding: 3rem 2rem;
+    gap: 5rem;
+    background: rgba(255, 255, 255, 0.01);
+    border-radius: var(--radius-md);
   }
 }
 
@@ -25,7 +28,7 @@
 
 @media (min-width: 1024px) {
   .bracket-round {
-    min-width: 280px;
+    min-width: 300px;
     gap: 1.5rem;
   }
 }
@@ -38,8 +41,9 @@
 
 @media (min-width: 1024px) {
   .bracket-round--finals {
-    min-width: 320px;
+    min-width: 340px;
     justify-content: center;
+    padding-left: 3rem;
   }
 }
 
@@ -95,7 +99,6 @@
     font-size: 1.6rem;
   }
 }
-
 @media (min-width: 1024px) {
   .bracket-round__title--final {
     font-size: 1.75rem;
@@ -103,6 +106,8 @@
 }
 
 /* ── Round Matches ── */
+/* Plus de padding-top ni de gap hardcodés par round :
+   le SVG se charge de tracer les lignes aux vraies positions. */
 .bracket-round__matches {
   display: flex;
   flex-direction: column;
@@ -112,30 +117,19 @@
 @media (min-width: 1024px) {
   .bracket-round__matches {
     gap: 1.5rem;
-  }
-
-  .bracket-round__matches--quarter {
-    padding-top: 3rem;
-  }
-
-  .bracket-round__matches--semi {
-    padding-top: 7rem;
+    justify-content: space-around;
+    flex: 1;
   }
 }
 
 /* ── Match Wrapper ── */
 .bracket-match-wrapper {
   position: relative;
+  z-index: 1; /* au-dessus du SVG */
 }
 
-@media (min-width: 1024px) {
-  .bracket-match-wrapper {
-    margin-bottom: 2rem;
-  }
-
-  .bracket-match-wrapper--final {
-    margin-top: 2rem;
-  }
+.bracket-match-wrapper--final {
+  margin-top: 2rem;
 }
 
 /* ── Bracket Match Card ── */
@@ -148,6 +142,7 @@
   transition: all var(--transition);
   position: relative;
   min-width: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 @media (min-width: 640px) {
@@ -155,17 +150,18 @@
     padding: 0.85rem 1rem;
   }
 }
-
 @media (min-width: 1024px) {
   .bracket-match {
     padding: 1rem 1.25rem;
+    min-width: 280px;
   }
 }
 
 .bracket-match:hover {
   border-color: var(--color-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(200, 146, 42, 0.3);
+  z-index: 10;
 }
 
 .bracket-match--live {
@@ -191,7 +187,6 @@
   opacity: 0.5;
   cursor: default;
 }
-
 .bracket-match--empty:hover {
   transform: none;
   box-shadow: none;
@@ -223,7 +218,6 @@
     padding: 0.5rem 0.65rem;
   }
 }
-
 @media (min-width: 1024px) {
   .bracket-match__team {
     gap: 0.75rem;
@@ -244,14 +238,12 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   flex-shrink: 0;
 }
-
 @media (min-width: 640px) {
   .bracket-match__flag {
     width: 28px;
     height: 19px;
   }
 }
-
 @media (min-width: 1024px) {
   .bracket-match__flag {
     width: 32px;
@@ -268,13 +260,11 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 @media (min-width: 640px) {
   .bracket-match__team-name {
     font-size: 0.925rem;
   }
 }
-
 @media (min-width: 1024px) {
   .bracket-match__team-name {
     font-size: 1rem;
@@ -292,13 +282,11 @@
   min-width: 24px;
   text-align: center;
 }
-
 @media (min-width: 640px) {
   .bracket-match__score {
     font-size: 1.2rem;
   }
 }
-
 @media (min-width: 1024px) {
   .bracket-match__score {
     font-size: 1.3rem;
@@ -324,7 +312,6 @@
   letter-spacing: 0.05em;
   animation: blink 1.5s ease-in-out infinite;
 }
-
 @media (min-width: 640px) {
   .bracket-match__live-indicator {
     font-size: 0.7rem;
