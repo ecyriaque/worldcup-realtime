@@ -96,10 +96,12 @@ const MatchDetail = () => {
       );
   }, [id]);
 
-  // Fusionner les événements initiaux et live, triés par minute
-  const allEvents = [...events, ...liveEvents].sort(
-    (a, b) => a.minute - b.minute,
-  );
+  // Fusionner les événements initiaux et live, en dédupliquant par eventId
+  const allEvents = Array.from(
+    new Map(
+      [...events, ...liveEvents].map((event) => [event.eventId, event]),
+    ).values(),
+  ).sort((a, b) => a.minute - b.minute);
 
   /* ── Loading ── */
   if (loading) {
@@ -293,7 +295,6 @@ const MatchDetail = () => {
         {/* ── Match Events ── */}
         {allEvents.length > 0 && (
           <section className="match-detail__events">
-            <h2 className="match-detail__info-title">Événements du match</h2>
             <MatchEvents
               events={allEvents}
               homeTeamId={liveMatch.homeTeam.teamId}
