@@ -1,9 +1,10 @@
-import type { MatchEvent, MatchEventType } from "../types/match";
+import type { MatchEvent, MatchEventType, Team } from "../types/match";
 import "./MatchEvents.css";
 
 interface MatchEventsProps {
   events: MatchEvent[];
-  homeTeamId: number;
+  homeTeam: Team;
+  awayTeam: Team;
 }
 
 const EVENT_CONFIG: Record<
@@ -18,7 +19,7 @@ const EVENT_CONFIG: Record<
   SUBSTITUTION: { icon: "🔄", label: "Remplacement", className: "event-sub" },
 };
 
-const MatchEvents = ({ events, homeTeamId }: MatchEventsProps) => {
+const MatchEvents = ({ events, homeTeam, awayTeam }: MatchEventsProps) => {
   if (events.length === 0) {
     return (
       <div className="match-events-empty">
@@ -33,26 +34,45 @@ const MatchEvents = ({ events, homeTeamId }: MatchEventsProps) => {
       <div className="match-events__timeline">
         {events.map((event) => {
           const config = EVENT_CONFIG[event.eventType];
-          const isHomeTeam = event.teamId === homeTeamId;
+          const isHomeTeam = event.teamId === homeTeam.teamId;
+          const team = isHomeTeam ? homeTeam : awayTeam;
 
           return (
             <div
               key={event.eventId}
               className={`match-event ${config.className} ${isHomeTeam ? "match-event--home" : "match-event--away"}`}
             >
-              <div className="match-event__minute">{event.minute}'</div>
-              <div className="match-event__content">
-                <div className="match-event__icon">{config.icon}</div>
-                <div className="match-event__details">
-                  <span className="match-event__player">
-                    {event.playerName}
-                  </span>
-                  <span className="match-event__type">{config.label}</span>
-                  {event.extraInfo && (
-                    <span className="match-event__extra">
-                      ({event.extraInfo})
+              {/* Minute */}
+              <div className="match-event__minute">
+                <span className="minute-number">{event.minute}'</span>
+              </div>
+
+              {/* Event card */}
+              <div className="match-event__card">
+                {/* Team info */}
+                <div className="match-event__team-info">
+                  <img
+                    src={team.flagUrl}
+                    alt={team.name}
+                    className="match-event__flag"
+                  />
+                  <span className="match-event__team-name">{team.name}</span>
+                </div>
+
+                {/* Event details */}
+                <div className="match-event__content">
+                  <div className="match-event__icon">{config.icon}</div>
+                  <div className="match-event__details">
+                    <span className="match-event__type">{config.label}</span>
+                    <span className="match-event__player">
+                      {event.playerName}
                     </span>
-                  )}
+                    {event.extraInfo && (
+                      <span className="match-event__extra">
+                        {event.extraInfo}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

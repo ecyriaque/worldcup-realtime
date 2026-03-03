@@ -297,7 +297,8 @@ const MatchDetail = () => {
           <section className="match-detail__events">
             <MatchEvents
               events={allEvents}
-              homeTeamId={liveMatch.homeTeam.teamId}
+              homeTeam={liveMatch.homeTeam}
+              awayTeam={liveMatch.awayTeam}
             />
           </section>
         )}

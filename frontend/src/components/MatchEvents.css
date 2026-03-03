@@ -2,11 +2,16 @@
   margin-top: 3rem;
 }
 
+match-detail__events {
+  margin-top: 3rem;
+}
+
 .match-events__title {
   font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #1a202c;
+  margin-bottom: 2rem;
+  color: white;
+  text-align: center;
 }
 
 .match-events-empty {
@@ -18,73 +23,168 @@
 }
 
 .match-events__timeline {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+/* Timeline vertical line */
+.match-events__timeline::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, #e2e8f0, #cbd5e0, #e2e8f0);
+  transform: translateX(-50%);
+  z-index: 0;
 }
 
 .match-event {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  z-index: 1;
+}
+
+/* Home team events (left side) */
+.match-event--home {
+  grid-template-areas: "card minute empty";
+}
+
+.match-event--home .match-event__card {
+  justify-self: end;
+  text-align: right;
+}
+
+.match-event--home .match-event__team-info {
+  flex-direction: row-reverse;
+}
+
+.match-event--home .match-event__content {
+  flex-direction: row-reverse;
+}
+
+/* Away team events (right side) */
+.match-event--away {
+  grid-template-areas: "empty minute card";
+}
+
+.match-event--away .match-event__card {
+  justify-self: start;
+  text-align: left;
+}
+
+.match-event--away .match-event__team-info {
+  flex-direction: row;
+}
+
+.match-event--away .match-event__content {
+  flex-direction: row;
+}
+
+/* Minute badge (center) */
+.match-event__minute {
+  grid-area: minute;
+  position: relative;
+  z-index: 2;
+  background: white;
+  border: 3px solid #e2e8f0;
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 12px;
-  border-left: 4px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s;
-}
-
-.match-event:hover {
+  justify-content: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transform: translateX(4px);
 }
 
-.match-event--home {
-  border-left-color: #3182ce;
-}
-
-.match-event--away {
-  border-left-color: #e53e3e;
-}
-
-.match-event__minute {
-  font-size: 1.25rem;
+.minute-number {
+  font-size: 1rem;
   font-weight: 700;
   color: #2d3748;
-  min-width: 3rem;
-  text-align: center;
-  background: #edf2f7;
-  padding: 0.5rem;
-  border-radius: 8px;
 }
 
+/* Event card */
+.match-event__card {
+  grid-area: card;
+  max-width: 400px;
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+
+.match-event__card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  transform: scale(1.02);
+}
+
+/* Team info header */
+.match-event__team-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.match-event__flag {
+  width: 24px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.match-event__team-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+/* Event content */
 .match-event__content {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex: 1;
+  gap: 0.75rem;
 }
 
 .match-event__icon {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
+  flex-shrink: 0;
 }
 
 .match-event__details {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  min-width: 0;
+}
+
+.match-event__type {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #718096;
 }
 
 .match-event__player {
   font-weight: 600;
   color: #1a202c;
   font-size: 1rem;
-}
-
-.match-event__type {
-  font-size: 0.875rem;
-  color: #718096;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .match-event__extra {
@@ -93,69 +193,102 @@
   font-style: italic;
 }
 
-/* Event type specific colors */
-.event-goal {
-  border-left-color: #48bb78 !important;
-}
-
+/* Event type specific styles */
 .event-goal .match-event__minute {
-  background: #c6f6d5;
-  color: #22543d;
+  border-color: #48bb78;
+  background: linear-gradient(135deg, #c6f6d5, #9ae6b4);
 }
 
-.event-penalty {
-  border-left-color: #4299e1 !important;
+.event-goal .match-event__card {
+  border-color: #48bb78;
 }
 
 .event-penalty .match-event__minute {
-  background: #bee3f8;
-  color: #2c5282;
+  border-color: #4299e1;
+  background: linear-gradient(135deg, #bee3f8, #90cdf4);
 }
 
-.event-own-goal {
-  border-left-color: #f56565 !important;
+.event-penalty .match-event__card {
+  border-color: #4299e1;
 }
 
 .event-own-goal .match-event__minute {
-  background: #fed7d7;
-  color: #742a2a;
+  border-color: #f56565;
+  background: linear-gradient(135deg, #fed7d7, #fc8181);
 }
 
-.event-yellow {
-  border-left-color: #ecc94b !important;
+.event-own-goal .match-event__card {
+  border-color: #f56565;
 }
 
 .event-yellow .match-event__minute {
-  background: #fefcbf;
-  color: #744210;
+  border-color: #ecc94b;
+  background: linear-gradient(135deg, #fefcbf, #faf089);
 }
 
-.event-red {
-  border-left-color: #fc8181 !important;
+.event-yellow .match-event__card {
+  border-color: #ecc94b;
 }
 
 .event-red .match-event__minute {
-  background: #fed7d7;
-  color: #742a2a;
+  border-color: #fc8181;
+  background: linear-gradient(135deg, #fed7d7, #feb2b2);
 }
 
-.event-sub {
-  border-left-color: #9f7aea !important;
+.event-red .match-event__card {
+  border-color: #fc8181;
 }
 
 .event-sub .match-event__minute {
-  background: #e9d8fd;
-  color: #44337a;
+  border-color: #9f7aea;
+  background: linear-gradient(135deg, #e9d8fd, #d6bcfa);
 }
 
+.event-sub .match-event__card {
+  border-color: #9f7aea;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
+  .match-events__timeline::before {
+    left: 2rem;
+  }
+
   .match-event {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+  }
+
+  .match-event--home,
+  .match-event--away {
+    grid-template-areas: "minute card";
   }
 
   .match-event__minute {
-    align-self: flex-start;
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .minute-number {
+    font-size: 0.875rem;
+  }
+
+  .match-event__card {
+    max-width: 100%;
+    justify-self: stretch !important;
+    text-align: left !important;
+  }
+
+  .match-event--home .match-event__team-info,
+  .match-event--home .match-event__content {
+    flex-direction: row;
+  }
+
+  .match-event__team-info {
+    flex-direction: row !important;
+  }
+
+  .match-event__content {
+    flex-direction: row !important;
   }
 }
