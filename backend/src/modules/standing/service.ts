@@ -79,7 +79,9 @@ export class GroupStandingService {
   async updateGroupStandings(groupId: number): Promise<GroupStanding[]> {
     // Récupérer tous les matchs terminés du groupe
     const matches = await this.matchRepository.findByGroup(groupId);
-    const finishedMatches = matches.filter((m) => m.status === MatchStatus.FINISHED);
+    const finishedMatches = matches.filter(
+      (m) => m.status === MatchStatus.FINISHED,
+    );
 
     // Initialiser les stats pour chaque équipe
     const teamStats = new Map<

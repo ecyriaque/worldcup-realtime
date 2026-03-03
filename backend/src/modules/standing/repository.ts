@@ -67,10 +67,7 @@ export class GroupStandingRepository {
   }
 
   async upsert(data: Partial<GroupStanding>): Promise<GroupStanding> {
-    const existing = await this.findByGroupAndTeam(
-      data.groupId!,
-      data.teamId!,
-    );
+    const existing = await this.findByGroupAndTeam(data.groupId!, data.teamId!);
 
     if (existing) {
       await this.repository.update(existing.standingId, data);
