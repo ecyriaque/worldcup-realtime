@@ -20,6 +20,9 @@ export class CreateMatchEventDto {
   @IsOptional()
   playerId?: number;
 
+  @IsString()
+  playerName!: string;
+
   @IsEnum(MatchEventType)
   eventType!: MatchEventType;
 
@@ -38,6 +41,10 @@ export class UpdateMatchEventDto {
   @IsInt()
   @IsOptional()
   playerId?: number;
+
+  @IsString()
+  @IsOptional()
+  playerName?: string;
 
   @IsEnum(MatchEventType)
   @IsOptional()

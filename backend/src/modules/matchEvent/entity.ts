@@ -25,6 +25,9 @@ export class MatchEvent {
   @Column({ name: "player_id", type: "int", nullable: true })
   playerId?: number;
 
+  @Column({ name: "player_name", type: "varchar", length: 100 })
+  playerName!: string;
+
   @Column({ name: "event_type", type: "enum", enum: MatchEventType })
   eventType!: MatchEventType;
 
