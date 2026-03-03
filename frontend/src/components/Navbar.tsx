@@ -36,6 +36,16 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
+              to="/groups"
+              className={({ isActive }) =>
+                isActive ? "navbar__link active" : "navbar__link"
+              }
+            >
+              Groupes
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
               to="/teams"
               className={({ isActive }) =>
                 isActive ? "navbar__link active" : "navbar__link"

@@ -5,6 +5,7 @@ import Matches from "./pages/matches";
 import MatchDetail from "./pages/matchDetail";
 import Teams from "./pages/teams";
 import TeamDetail from "./pages/teamDetail";
+import Groups from "./pages/groups";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="matches" element={<Matches />} />
         <Route path="matches/:id" element={<MatchDetail />} />
+        <Route path="groups" element={<Groups />} />
         <Route path="teams" element={<Teams />} />
         <Route path="teams/:id" element={<TeamDetail />} />
       </Route>
