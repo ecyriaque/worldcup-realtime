@@ -246,7 +246,7 @@ VALUES
 ('2026-06-21 18:00:00','Lincoln Financial Field, Philadelphia','SCHEDULED',1,(SELECT group_id FROM group_stage WHERE name='K'),
  (SELECT team_id FROM team WHERE code='SWE'),(SELECT team_id FROM team WHERE code='HAI')),
 ('2026-06-21 21:00:00','Lincoln Financial Field, Philadelphia','SCHEDULED',1,(SELECT group_id FROM group_stage WHERE name='K'),
- (SELECT team_id FROM team WHERE code='SRB'),(SELECT team_id FROM team WHERE code='CPV'));
+ (SELECT team_id FROM team WHERE code='SRB'),(SELECT team_id FROM team WHERE code='NGA'));
 
 -- GROUP L
 INSERT INTO match (match_datetime, stadium, status, phase_id, group_id, home_team_id, away_team_id)
