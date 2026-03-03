@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Match, PhaseType, MatchEvent, Team } from "../types/match";
+import type { Match, PhaseType, MatchEvent, Team, Group, GroupStanding } from "../types/match";
 import type { Player } from "../types/player";
 import { mockMatches } from "../data/mockMatches";
 
@@ -119,3 +119,47 @@ export async function fetchAllPlayers(): Promise<Player[]> {
     return [];
   }
 }
+
+// ── Groups API ───────────────────────────────────────────────────────────────
+
+/**
+ * Récupère tous les groupes.
+ */
+export async function fetchGroups(): Promise<Group[]> {
+  try {
+    const res = await api.get<Group[]>("/api/groups");
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching groups:", error);
+    return [];
+  }
+}
+
+/**
+ * Récupère un groupe par son id.
+ */
+export async function fetchGroupById(id: number): Promise<Group | undefined> {
+  try {
+    const res = await api.get<Group>(`/api/groups/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching group:", error);
+    return undefined;
+  }
+}
+
+// ── Standings API ────────────────────────────────────────────────────────────
+
+/**
+ * Récupère les classements d'un groupe.
+ */
+export async function fetchStandingsByGroup(groupId: number): Promise<GroupStanding[]> {
+  try {
+    const res = await api.get<GroupStanding[]>(`/api/standings/group/${groupId}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching standings:", error);
+    return [];
+  }
+}
+

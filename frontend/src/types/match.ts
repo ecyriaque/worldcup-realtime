@@ -30,6 +30,22 @@ export interface Group {
   phaseId: number;
 }
 
+export interface GroupStanding {
+  standingId: number;
+  groupId: number;
+  teamId: number;
+  played: number;
+  wins: number;
+  draw: number;
+  losses: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  goalDifference: number;
+  points: number;
+  team?: Team;
+  updatedAt?: string;
+}
+
 export interface Phase {
   phaseId: number;
   name: string;
