@@ -72,16 +72,16 @@ const GroupStandings = ({ groupId, groupName }: GroupStandingsProps) => {
               <th className="standings-table__stat" title="Victoires">
                 V
               </th>
-              <th className="standings-table__stat" title="Nuls">
+              <th className="standings-table__stat standings-table__stat--hide-mobile" title="Nuls">
                 N
               </th>
-              <th className="standings-table__stat" title="Défaites">
+              <th className="standings-table__stat standings-table__stat--hide-mobile" title="Défaites">
                 D
               </th>
-              <th className="standings-table__stat" title="Buts pour">
+              <th className="standings-table__stat standings-table__stat--hide-mobile" title="Buts pour">
                 BP
               </th>
-              <th className="standings-table__stat" title="Buts contre">
+              <th className="standings-table__stat standings-table__stat--hide-mobile" title="Buts contre">
                 BC
               </th>
               <th className="standings-table__stat" title="Différence de buts">
@@ -131,12 +131,12 @@ const GroupStandings = ({ groupId, groupName }: GroupStandingsProps) => {
                 <td className="standings-table__stat standings-table__stat--wins">
                   {standing.wins}
                 </td>
-                <td className="standings-table__stat">{standing.draw}</td>
-                <td className="standings-table__stat standings-table__stat--losses">
+                <td className="standings-table__stat standings-table__stat--hide-mobile">{standing.draw}</td>
+                <td className="standings-table__stat standings-table__stat--losses standings-table__stat--hide-mobile">
                   {standing.losses}
                 </td>
-                <td className="standings-table__stat">{standing.goalsFor}</td>
-                <td className="standings-table__stat">
+                <td className="standings-table__stat standings-table__stat--hide-mobile">{standing.goalsFor}</td>
+                <td className="standings-table__stat standings-table__stat--hide-mobile">
                   {standing.goalsAgainst}
                 </td>
                 <td
