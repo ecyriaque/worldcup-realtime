@@ -1,6 +1,7 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 import cors from "cors";
 import { config } from "./config";
+import { helmetConfig, apiLimiter } from "./middleware/security";
 import healthRoutes from "./routes/health.routes";
 import competitionRoutes from "./modules/competition/routes";
 import phaseRoutes from "./modules/phase/routes";
@@ -14,18 +15,24 @@ import playerRoutes from "./modules/player/routes";
 export function createApp(): Application {
   const app = express();
 
+
+  app.use(helmetConfig);
+
   app.use(
     cors({
       origin: config.corsOrigin,
       credentials: true,
     }),
   );
+
   app.use(express.json());
 
-  // Health check
+  app.use("/api/", apiLimiter);
+
+
   app.use("/health", healthRoutes);
 
-  // API routes
+
   app.use("/api/competitions", competitionRoutes);
   app.use("/api/phases", phaseRoutes);
   app.use("/api/groups", groupRoutes);
