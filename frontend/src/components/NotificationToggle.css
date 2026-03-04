@@ -1,0 +1,77 @@
+.notif-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+/* ── Variante icône (pour les cards) ── */
+.notif-toggle--icon {
+  background: transparent;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #94a3b8;
+  opacity: 0.6;
+}
+
+.notif-toggle--icon:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.notif-toggle--icon.notif-toggle--active {
+  opacity: 1;
+  color: #f59e0b;
+}
+
+/* ── Variante complète (pour la page détail) ── */
+.notif-toggle--full {
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+
+.notif-toggle--full:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
+.notif-toggle--full.notif-toggle--active {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+
+.notif-toggle--full.notif-toggle--active:hover {
+  background: rgba(245, 158, 11, 0.25);
+}
+
+.notif-toggle__icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.notif-toggle__label {
+  line-height: 1;
+}
+
+.notif-toggle__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #475569;
+  transition: background 0.2s;
+}
+
+.notif-toggle__dot--on {
+  background: #f59e0b;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
+}

@@ -5,6 +5,7 @@ import { useMatchSocket, useMatchEvents } from "../hooks/useMatchSocket";
 import type { Match, MatchEvent } from "../types/match";
 import { PHASE_LABELS } from "../types/match";
 import MatchEvents from "../components/MatchEvents";
+import NotificationToggle from "../components/NotificationToggle";
 import "./matchDetail.css";
 
 /* ── Reducer ─────────────────────────────────────────────── */
@@ -171,6 +172,7 @@ const MatchDetail = () => {
               {liveMatch.status === "LIVE" && <span className="pulse-dot" />}
               {statusCfg.icon} {statusCfg.label}
             </span>
+            <NotificationToggle matchId={Number(id)} variant="full" />
           </div>
 
           {/* Teams + score */}

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useLocation } from "react-router-dom";
 import { socket } from "../services/socket";
+import { getSubscribedMatchIds } from "./useNotificationPreferences";
 
 type MatchEventType = 
   | "GOAL" 
@@ -65,6 +66,11 @@ export function useMatchEventNotifications() {
       
       const currentPath = locationRef.current.pathname;
       if (currentPath === `/matches/${event.matchId}`) {
+        return;
+      }
+
+      const subscriptions = getSubscribedMatchIds();
+      if (subscriptions.size > 0 && !subscriptions.has(event.matchId)) {
         return;
       }
 

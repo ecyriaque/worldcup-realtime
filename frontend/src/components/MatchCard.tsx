@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import type { Match } from "../types/match";
 import { PHASE_LABELS } from "../types/match";
+import NotificationToggle from "./NotificationToggle";
 import "./MatchCard.css";
 
 interface MatchCardProps {
@@ -98,6 +99,7 @@ const MatchCard = ({ match }: MatchCardProps) => {
           📅 {formattedDate} · {formattedTime}
         </span>
         {match.stadium && <span>🏟️ {match.stadium}</span>}
+        <NotificationToggle matchId={match.matchId} variant="icon" />
       </div>
     </article>
   );
