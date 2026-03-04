@@ -52,6 +52,10 @@ type EventState = MatchEvent[];
 type EventAction = { type: "ADD_EVENT"; payload: MatchEvent };
 
 function eventReducer(state: EventState, action: EventAction): EventState {
+  const exists = state.some(e => e.eventId === action.payload.eventId);
+  if (exists) {
+    return state;
+  }
   return [...state, action.payload].sort((a, b) => a.minute - b.minute);
 }
 

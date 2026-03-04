@@ -44,11 +44,24 @@ export class MatchEventController {
         eventId: event.eventId,
         matchId: event.matchId,
         teamId: event.teamId,
+        teamName: event.team?.name,
         playerId: event.playerId,
         playerName: event.playerName,
         eventType: event.eventType,
         minute: event.minute,
         extraInfo: event.extraInfo,
+        homeTeam: event.match?.homeTeam ? {
+          teamId: event.match.homeTeam.teamId,
+          name: event.match.homeTeam.name,
+          code: event.match.homeTeam.code,
+          flagUrl: event.match.homeTeam.flagUrl,
+        } : undefined,
+        awayTeam: event.match?.awayTeam ? {
+          teamId: event.match.awayTeam.teamId,
+          name: event.match.awayTeam.name,
+          code: event.match.awayTeam.code,
+          flagUrl: event.match.awayTeam.flagUrl,
+        } : undefined,
       };
       emitMatchEventUpdate(io, payload);
     }
@@ -67,11 +80,25 @@ export class MatchEventController {
         eventId: event.eventId,
         matchId: event.matchId,
         teamId: event.teamId,
+        teamName: event.team?.name,
         playerId: event.playerId,
         playerName: event.playerName,
         eventType: event.eventType,
         minute: event.minute,
         extraInfo: event.extraInfo,
+        // Infos du match pour le header du toast
+        homeTeam: event.match?.homeTeam ? {
+          teamId: event.match.homeTeam.teamId,
+          name: event.match.homeTeam.name,
+          code: event.match.homeTeam.code,
+          flagUrl: event.match.homeTeam.flagUrl,
+        } : undefined,
+        awayTeam: event.match?.awayTeam ? {
+          teamId: event.match.awayTeam.teamId,
+          name: event.match.awayTeam.name,
+          code: event.match.awayTeam.code,
+          flagUrl: event.match.awayTeam.flagUrl,
+        } : undefined,
       };
       emitMatchEventUpdate(io, payload);
     }

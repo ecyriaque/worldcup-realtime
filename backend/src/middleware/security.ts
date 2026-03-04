@@ -39,17 +39,13 @@ export const helmetConfig = helmet({
  */
 export const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limite chaque IP à 100 requêtes par fenêtre
+  max: 500, // Limite chaque IP à 500 requêtes par fenêtre
   message: {
     error: "Too many requests from this IP, please try again later.",
     retryAfter: "15 minutes",
   },
   standardHeaders: true, // Retourne les headers RateLimit-*
   legacyHeaders: false, // Désactive les headers X-RateLimit-*
-  // Clé personnalisée pour identifier les clients
-  keyGenerator: (req) => {
-    return req.ip || req.socket.remoteAddress || "unknown";
-  },
   // Handler personnalisé pour les dépassements
   handler: (req, res) => {
     console.warn(`⚠️ Rate limit exceeded for IP: ${req.ip} on ${req.path}`);
@@ -67,7 +63,7 @@ export const apiLimiter = rateLimit({
  */
 export const strictLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // Limite à 20 requêtes pour les opérations sensibles
+  max: 500, // Limite à 20 requêtes pour les opérations sensibles
   message: {
     error: "Too many modification requests, please try again later.",
     retryAfter: "15 minutes",

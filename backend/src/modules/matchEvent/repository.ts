@@ -20,7 +20,7 @@ export class MatchEventRepository {
   async findById(id: number): Promise<MatchEvent | null> {
     return this.repository.findOne({
       where: { eventId: id },
-      relations: ["match", "team", "player"],
+      relations: ["match", "match.homeTeam", "match.awayTeam", "team", "player"],
     });
   }
 
@@ -42,7 +42,9 @@ export class MatchEventRepository {
 
   async create(data: Partial<MatchEvent>): Promise<MatchEvent> {
     const event = this.repository.create(data);
-    return this.repository.save(event);
+    const savedEvent = await this.repository.save(event);
+    // Reload with relations for WebSocket payload
+    return this.findById(savedEvent.eventId) as Promise<MatchEvent>;
   }
 
   async update(

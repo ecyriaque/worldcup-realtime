@@ -82,9 +82,5 @@ export function emitMatchEventUpdate(
   io: SocketIOServer,
   event: MatchEventPayload | { matchId: number; [key: string]: unknown },
 ): void {
-  const matchId = event.matchId;
-  // Aux clients qui regardent la page détail du match
-  io.to(matchRoom(matchId)).emit(EVENTS.MATCH_EVENT, event);
-  // Broadcast global pour notifier les autres pages
   io.emit(EVENTS.MATCH_EVENT, event);
 }
