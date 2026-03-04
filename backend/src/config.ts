@@ -7,6 +7,7 @@ export const config: Config = {
   // Server
   port: Number(process.env.PORT || 3000),
   corsOrigin: process.env.CORS_ORIGIN?.split(",") || "*",
+  apiKey: process.env.API_KEY || "",
 
   // Database
   db: {

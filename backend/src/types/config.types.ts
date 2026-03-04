@@ -1,6 +1,7 @@
 export interface Config {
   port: number;
   corsOrigin: string | string[];
+  apiKey: string;
   db: DatabaseConfig;
 }
 
